@@ -1,0 +1,21 @@
+{
+    "name": "refcoach",
+    "version": "0.0.1",
+    "description": "Ref Coach project",
+    "author": "Sebastien Chassande-Barrioz",
+    "homepage": "https://refcoach",
+    "scripts": {
+        "noproxy": "set HTTP_PROXY= && set HTTPS_PROXY=",
+        "start": "cd mobile && ionic serve",
+        "build": "cd mobile && ionic build --prod --service-worker",
+        "deploy": "cd firebase && firebase deploy"
+    },
+    "private": true,
+    "devDependencies": {
+        "grunt": "^1.0.4",
+        "grunt-contrib-jshint": "^2.1.0",
+        "grunt-copy": "^0.1.0",
+        "grunt-exec": "^3.0.0",
+        "grunt-markdown": "^0.7.0"
+    }
+}
