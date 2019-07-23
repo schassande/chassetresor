@@ -329,7 +329,7 @@ export class UserService  extends RemotePersistentDataService<User> {
         return {
             id: null,
             accountId: cred.user.uid,
-            accountStatus: 'VALIDATION_REQUIRED',
+            accountStatus: 'ACTIVE',
             role: 'USER',
             authProvider,
             version: 0,
@@ -352,15 +352,15 @@ export class UserService  extends RemotePersistentDataService<User> {
         }
     }
     public sendNewAccountToAdmin(userId: string): Observable<any> {
-        return this.angularFireFunctions.httpsCallable('sendNewAccountToAdmin')({userId});
+        return of(''); // this.angularFireFunctions.httpsCallable('sendNewAccountToAdmin')({userId});
     }
     public sendNewAccountToUser(userId: string): Observable<any> {
-        return this.angularFireFunctions.httpsCallable('sendNewAccountToUser')({userId});
+        return of(''); // this.angularFireFunctions.httpsCallable('sendNewAccountToUser')({userId});
     }
     public sendAccountValidated(userId: string): Observable<any> {
-        return this.angularFireFunctions.httpsCallable('sendAccountValidated')({userId});
+        return of(''); // this.angularFireFunctions.httpsCallable('sendAccountValidated')({userId});
     }
     public sendAccountNotValidated(userId: string): Observable<any> {
-        return this.angularFireFunctions.httpsCallable('sendAccountNotValidated')({userId});
+        return of(''); // this.angularFireFunctions.httpsCallable('sendAccountNotValidated')({userId});
     }
 }

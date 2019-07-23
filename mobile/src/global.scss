@@ -3,9 +3,31 @@
 @import '~@ionic/angular/css/normalize.css';
 @import '~@ionic/angular/css/structure.css';
 @import '~@ionic/angular/css/typography.css';
-@import '~@ionic/angular/css/display.css';
 @import '~@ionic/angular/css/padding.css';
 @import '~@ionic/angular/css/float-elements.css';
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+.plusButton {
+    font-size: 2em;
+}
+
+.redButton {
+    background-color: red;
+}
+
+.greenButton {
+    background-color: green;
+}
+
+ion-title {
+    text-align: center;
+}
+
+.listItemButton .item-inner {
+    border: none !important;
+}
+
+:root ion-header {
+    --ion-background-color: #ffff00;
+}
