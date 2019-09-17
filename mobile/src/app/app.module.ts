@@ -24,11 +24,26 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { environment } from '../environments/environment';
 import { UserService } from './service/UserService';
+import { ScanPageComponent } from './page/scan-page/scan-page.component';
+import { HomePage } from './page/home/home.page';
+import { ManagePlayersComponent } from './page/admin/manage-players/manage-players.component';
+import { ManageQuizzComponent } from './page/admin/manage-quizz/manage-quizz.component';
+import { QuizzComponent } from './page/answer/quizz/quizz.component';
+import { QuestionComponent } from './page/answer/question/question.component';
+import { RulesComponent } from './page/rules/rules.component';
 
 @NgModule({
-  declarations: [AppComponent,
+  declarations: [
+    HomePage,
+    ManagePlayersComponent,
+    ManageQuizzComponent,
+    QuizzComponent,
+    QuestionComponent,
+    AppComponent,
     UserLoginComponent,
-    UserEditPage],
+    UserEditPage,
+    ScanPageComponent,
+    RulesComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
