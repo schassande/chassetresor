@@ -9,37 +9,52 @@
             <ion-list>
                 <ion-item routerLink="/home">
                     <ion-icon name="home" scope="start"></ion-icon>
-                    <ion-button fill="clear">Home</ion-button>
+                    <ion-menu-toggle>
+                        <ion-button fill="clear">Accueil</ion-button>
+                    </ion-menu-toggle>
                 </ion-item>
                 <ion-item routerLink="/scan">
                     <ion-icon name="camera" scope="start"></ion-icon>
-                    <ion-button fill="clear">Scanner un code</ion-button>
+                    <ion-menu-toggle>
+                        <ion-button fill="clear">Scanner un code</ion-button>
+                    </ion-menu-toggle>
                 </ion-item>
                 <ion-item routerLink="/home">
                     <ion-icon name="trophy" scope="start"></ion-icon>
-                    <ion-button fill="clear">Répondre à l'énigme</ion-button>
+                    <ion-menu-toggle>
+                        <ion-button fill="clear">Répondre à l'énigme</ion-button>
+                    </ion-menu-toggle>
                 </ion-item>
                 <ion-item routerLink="/rules">
                     <ion-icon name="help-circle" scope="start"></ion-icon>
-                    <ion-button fill="clear">Règles</ion-button>
+                    <ion-menu-toggle>
+                        <ion-button fill="clear">Règles</ion-button>
+                    </ion-menu-toggle>
                 </ion-item>
                 <ion-item routerLink="/admin/quizz">
                     <ion-icon name="cog" scope="start"></ion-icon>
-                    <ion-button fill="clear">Gestion du quizz</ion-button>
+                    <ion-menu-toggle>
+                        <ion-button fill="clear">Gestion du quizz</ion-button>
+                    </ion-menu-toggle>
                 </ion-item>
                 <ion-item routerLink="/admin/players">
                     <ion-icon name="ribbon" scope="start"></ion-icon>
-                    <ion-button fill="clear">Gestion des joueurs</ion-button>
-                </ion-item>
-                <ion-item routerLink="/home">
-                    <ion-icon name="refresh" scope="start"></ion-icon>
-                    <ion-button fill="clear">Reload application</ion-button>
+                    <ion-menu-toggle>
+                        <ion-button fill="clear">Gestion des joueurs</ion-button>
+                    </ion-menu-toggle>
                 </ion-item>
                 <ion-item>
-                    <ion-icon name="log-out" scope="start"></ion-icon>
-                    <ion-button fill="clear" (click)="logout()">Log out</ion-button>
+                    <ion-icon name="refresh" scope="start"></ion-icon>
+                    <ion-menu-toggle>
+                        <ion-button fill="clear">Recharger l'application</ion-button>
+                    </ion-menu-toggle>
                 </ion-item>
-
+                <ion-item routerLink="/user/login">
+                    <ion-icon name="log-out" scope="start"></ion-icon>
+                    <ion-menu-toggle>
+                        <ion-button fill="clear" (click)="logout()">Déconnexion</ion-button>
+                    </ion-menu-toggle>
+                </ion-item>
             </ion-list>
         </ion-content>
     </ion-menu>
