@@ -16,7 +16,7 @@ import { RulesComponent } from './page/rules/rules.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomePage, canActivate: [AuthGuard] },
+  { path: 'home', component: HomePage/*, canActivate: [AuthGuard]*/ },
   { path: 'user/login', component: UserLoginComponent},
   { path: 'user/create', component: UserEditPage},
   { path: 'user/edit/:id', component: UserEditPage},

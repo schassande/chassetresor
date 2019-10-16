@@ -8,8 +8,23 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <div class="ion-padding">
-        <h2>Home Page</h2>
-        <p>La page d'accueil fonctionne</p>
-    </div>
+ 
+    <ion-button class="bouton" shape="round" size="large" routerLink="/scan">
+        <ion-icon class="icone" name="qr-scanner" scope="start"></ion-icon>
+        <ion-text class="texte-bouton">Scannez un code</ion-text>
+    </ion-button>
+
+    <ion-button class="bouton" shape="round" size="large">
+            <ion-icon class="icone" name="trophy" scope="start"></ion-icon>
+            <ion-text class="texte-bouton">Répondez au QUIZ</ion-text>
+    </ion-button>
+
+    <ion-content>
+        <ion-label>Répondez aux questions suivantes : </ion-label>
+        <ion-item *ngFor="let question of questions">
+            <ion-label>{{question.libelle}}</ion-label>
+            <ion-icon class="icone" name="qr-scanner"></ion-icon>
+        </ion-item>
+    </ion-content>
+   
 </ion-content>
