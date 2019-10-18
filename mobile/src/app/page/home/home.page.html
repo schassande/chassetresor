@@ -1,30 +1,45 @@
-<ion-header>
-    <ion-toolbar>
-        <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
-        <ion-title style="text-align: center;">Accueil</ion-title>
-        <ion-buttons slot="end">
-            <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
-        </ion-buttons>
-    </ion-toolbar>
-</ion-header>
-<ion-content>
- 
-    <ion-button class="bouton" shape="round" size="large" routerLink="/scan">
-        <ion-icon class="icone" name="qr-scanner" scope="start"></ion-icon>
-        <ion-text class="texte-bouton">Scannez un code</ion-text>
-    </ion-button>
-
-    <ion-button class="bouton" shape="round" size="large">
-            <ion-icon class="icone" name="trophy" scope="start"></ion-icon>
-            <ion-text class="texte-bouton">Répondez au QUIZ</ion-text>
-    </ion-button>
-
+    <ion-header>
+        <ion-toolbar>
+            <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
+            <ion-title style="text-align: center;">Accueil</ion-title>
+            <ion-buttons slot="end">
+                <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
+            </ion-buttons>
+        </ion-toolbar>
+    </ion-header>
     <ion-content>
-        <ion-label>Répondez aux questions suivantes : </ion-label>
-        <ion-item *ngFor="let question of questions">
-            <ion-label>{{question.libelle}}</ion-label>
-            <ion-icon class="icone" name="qr-scanner"></ion-icon>
-        </ion-item>
-    </ion-content>
-   
+
+        <!-- Permet de centrer la page. Voir si moyen plus propre car galère en css -->
+        <ion-grid style="height: 100%">
+            <ion-row justify-content-center align-items-center style="height: 100%">
+ 
+                <ion-button class="bouton" shape="round" size="large" routerLink="/scan">
+                    <ion-icon class="icone" name="camera" scope="start"></ion-icon>
+                    <ion-text class="texte-bouton">Scannez un code</ion-text>
+                </ion-button>
+
+
+
+                <ion-content>
+                    <ion-label>Répondez aux questions suivantes : </ion-label>
+                    <ion-item *ngFor="let question of questions">
+                        <ion-label>{{question.libelle}}</ion-label>
+                        <ion-icon class="icone" name="qr-scanner"></ion-icon>
+                    </ion-item>
+                </ion-content>
+
+                <ion-button class="bouton" expand="full" routerLink="/quizz" 
+                style="width: 100%;
+                height: 56px;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                margin: 0;">
+                    <ion-icon class="icone" name="trophy" scope="start"></ion-icon>
+                    <ion-text class="texte-bouton">Répondez au QUIZ</ion-text>
+                </ion-button>
+        
+            </ion-row>
+        </ion-grid>s
+
 </ion-content>

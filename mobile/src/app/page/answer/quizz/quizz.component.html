@@ -1,3 +1,27 @@
-<p>
-  quizz works!
-</p>
+<ion-header>
+    <ion-toolbar>
+        <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
+        <ion-title style="text-align: center;">Répondre à l'énigme</ion-title>
+        <ion-buttons slot="end">
+            <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+
+    <!-- Permet de centrer la page. Voir si moyen plus propre car galère en css -->
+    <ion-grid style="height: 100%">
+      <ion-row justify-content-center align-items-center style="height: 100%">
+
+
+
+      </ion-row>
+    </ion-grid>
+
+    <ion-fab horizontal="start" vertical="bottom" slot="fixed">
+        <ion-fab-button color="danger" routerLink="/home">
+          <ion-icon name="ios-arrow-back"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+   
+</ion-content>

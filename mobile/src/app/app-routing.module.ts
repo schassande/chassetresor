@@ -23,8 +23,8 @@ const routes: Routes = [
   { path: 'scan', component: ScanPageComponent},
   { path: 'admin/players', component: ManagePlayersComponent},
   { path: 'admin/quizz', component: ManageQuizzComponent},
-  { path: 'quizz/:idQuizz', component: QuizzComponent},
-  { path: 'question/:idQuizz/:idQuestion', component: QuestionComponent},
+  { path: 'quizz', component: QuizzComponent},
+  { path: 'question', component: QuestionComponent},
   { path: 'rules', component: RulesComponent}
 ];
 
