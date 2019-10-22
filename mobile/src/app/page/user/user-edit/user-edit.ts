@@ -20,6 +20,7 @@ import { User} from '../../../model/user';
   templateUrl: 'user-edit.html',
 })
 export class UserEditPage implements OnInit {
+
   user: User;
   error: string[] = [];
   saving = false;
@@ -54,13 +55,13 @@ export class UserEditPage implements OnInit {
             }
           });
         } else {
-          this.initReferee();
+          this.initUser();
         }
           })
     ).subscribe();
   }
 
-  public initReferee() {
+  public initUser() {
     this.user = {
       id: null,
       accountId: null,
@@ -70,22 +71,49 @@ export class UserEditPage implements OnInit {
       creationDate : new Date(),
       lastUpdate : new Date(),
       dataStatus: 'NEW',
-      email: '@',
+      email: '',
       password: '',
+      firstName: '',
+      lastName: '',
+      phone: null,
       token: null
     };
   }
+
+  /** 
+   * Méthode de vérification de la validité du formulaire
+   * Créé un tableau d'erreur vide puis push dedans chacune des erreurs du formulaire
+   * Renvoie true si cette liste est vide à la fin des vérifs, false sinon
+   */
   isValid(): boolean {
+    
     this.error = [];
+
+    // Vérif email
     if (!this.isValidString(this.user.email, 5, 50)) {
-      this.error.push(('Invalid email: 5 to 50 chars'));
+      this.error.push(('Invalid email length: must be 5 to 50 chars'));
+    }
+    // Vérif password
+    if (!this.isValidString(this.user.password, 5, 15)) {
+      this.error.push(('Invalid password length: must be 5 to 15 chars'));
     }
     return this.error.length === 0;
   }
+
+  /**
+   * Méthode de vérification des normes de taille d'une String
+   * @param str La String
+   * @param minimalLength La taille minimale requise
+   * @param maximalLength La taille maximale requise
+   */
   isValidString(str: string, minimalLength: number = 0, maximalLength: number = 100): boolean {
     return str && str.trim().length >= minimalLength && str.trim().length <= maximalLength;
   }
 
+  /**
+   * Méthode appelée à la création d'un User
+   * @param event le click sur le bouton save
+   */
   public newUser(event) {
     if (this.isValid()) {
       this.saving = true;
@@ -93,8 +121,8 @@ export class UserEditPage implements OnInit {
         this.saving = false;
         if (response.error) {
           if (response.error.code === 'auth/email-already-in-use') {
-            console.log('The email addresse is already used.');
-            this.toastController.create({ message: 'The email addresse is already used: ' + this.user.email, duration: 5000})
+            console.log('The email address is already used.');
+            this.toastController.create({ message: 'The email address is already used: ' + this.user.email, duration: 5000})
               .then((toast) => toast.present());
           } else {
             this.toastController.create({ message: 'Error when saving the user info: ' + this.error, duration: 5000})
@@ -124,6 +152,7 @@ export class UserEditPage implements OnInit {
       ]
     }).then( (alert) => alert.present() );
   }
+
   cancel() {
     if (this.user.dataStatus === 'NEW') {
       this.navController.navigateRoot('/user/login');

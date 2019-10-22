@@ -7,6 +7,9 @@ export type AccountStatus = 'VALIDATION_REQUIRED' | 'ACTIVE' | 'LOCKED' | 'DELET
 export interface User extends PersistentData {
     email: string;
     password?: string;
+    firstName: string;
+    lastName: string;
+    phone: Number;
     accountId: string;
     token?: string;
     role: AppRole;
