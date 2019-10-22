@@ -9,11 +9,16 @@ import { Quizz } from 'src/app/model/quizz';
 })
 export class HomePage implements OnInit{
 
-  quizz: Quizz;
+  /** Nombre d'indices à trouver */
+  nbIndices : number;
+  /** Indices trouvés */
+  indicesTrouves : string;
 
   constructor() {}
 
   ngOnInit(): void {
+    this.nbIndices = 11;
+    this.indicesTrouves = 'MMMMM';
     //throw new Error("Method not implemented.");
   }
 

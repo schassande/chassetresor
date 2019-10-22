@@ -31,9 +31,11 @@ import { ManageQuizzComponent } from './page/admin/manage-quizz/manage-quizz.com
 import { QuizzComponent } from './page/answer/quizz/quizz.component';
 import { QuestionComponent } from './page/answer/question/question.component';
 import { RulesComponent } from './page/rules/rules.component';
+import { IndicesPipe } from './utlis/indices.pipe';
 
 @NgModule({
   declarations: [
+    IndicesPipe,
     HomePage,
     ManagePlayersComponent,
     ManageQuizzComponent,

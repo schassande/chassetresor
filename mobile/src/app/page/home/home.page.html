@@ -28,15 +28,15 @@
                     </ion-item>
                 </ion-content>
 
-                <ion-button class="bouton" expand="full" routerLink="/quizz" 
+                <ion-button class="bouton" expand="full" routerLink="/quizz" color="success"
                 style="width: 100%;
                 height: 56px;
                 position: fixed;
                 bottom: 0;
                 left: 0;
                 margin: 0;">
-                    <ion-icon class="icone" name="trophy" scope="start"></ion-icon>
-                    <ion-text class="texte-bouton">_ _ _ _ _ _ _ _ _ _ _</ion-text>
+                    <ion-icon class="icone" name="trophy" scope="start" style="margin-right: 3%; width: 8%;"></ion-icon>
+                    <ion-text class="texte-bouton">{{indicesTrouves|indices:nbIndices}}</ion-text>
                 </ion-button>
         
             </ion-row>
