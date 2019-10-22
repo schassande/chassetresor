@@ -1,4 +1,4 @@
-    <ion-header>
+<ion-header>
         <ion-toolbar>
             <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
             <ion-title style="text-align: center;">Accueil</ion-title>
@@ -7,39 +7,74 @@
             </ion-buttons>
         </ion-toolbar>
     </ion-header>
+
+    <!-- Etat de l'écran avec des questions en attente -->
+    <ion-label *ngIf="hasQuestions()" style="padding: 15px;"> Répondez aux questions suivantes : </ion-label>
+
     <ion-content>
 
         <!-- Permet de centrer la page. Voir si moyen plus propre car galère en css -->
         <ion-grid style="height: 100%">
             <ion-row justify-content-center align-items-center style="height: 100%">
  
-                <ion-button class="bouton" shape="round" size="large" routerLink="/scan">
-                    <ion-icon class="icone" name="camera" scope="start"></ion-icon>
-                    <ion-text class="texte-bouton">Scannez un code</ion-text>
+                <!-- Etat initial de l'écran-->
+                <ion-button 
+                    class="bouton" 
+                    shape="round" 
+                    size="large"
+                    routerLink="/scan"
+                    *ngIf="!hasAllIndices() &&  !hasQuestions()"
+                    >
+                    <ion-icon 
+                        class="icone" 
+                        name="camera" 
+                        scope="start" 
+                        style="margin-right:3%"></ion-icon>
+                    <ion-text 
+                        class="texte-bouton">Scannez un code</ion-text>
                 </ion-button>
 
-
-
-                <ion-content>
-                    <ion-label>Répondez aux questions suivantes : </ion-label>
+                <!-- Etat de l'écran avec des questions en attente -->
+                <ion-list style="width: 100%"  *ngIf="hasQuestions()">
                     <ion-item *ngFor="let question of questions">
+                        <ion-label>{{question.id}}</ion-label>
                         <ion-label>{{question.libelle}}</ion-label>
-                        <ion-icon class="icone" name="qr-scanner"></ion-icon>
-                    </ion-item>
-                </ion-content>
+                        <ion-icon class="icone" name="arrow-forward"></ion-icon>
+                    </ion-item>  
+                </ion-list>
 
-                <ion-button class="bouton" expand="full" routerLink="/quizz" color="success"
-                style="width: 100%;
-                height: 56px;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                margin: 0;">
-                    <ion-icon class="icone" name="trophy" scope="start" style="margin-right: 3%; width: 8%;"></ion-icon>
-                    <ion-text class="texte-bouton">{{indicesTrouves|indices:nbIndices}}</ion-text>
+                <!-- Etat final de l'écran : Tous les indices ont ete trouves-->
+                <ion-button 
+                    class="bouton" 
+                    shape="round" 
+                    size="large"
+                    routerLink="/quizz"
+                    color="success"
+                    *ngIf="hasAllIndices() &&  !hasQuestions()">
+                    <ion-icon 
+                        class="icone" 
+                        name="trophy" 
+                        scope="start"
+                        style="margin-right:3%"></ion-icon>
+                    <ion-text 
+                        class="texte-bouton">Répondez à l'énigme</ion-text>
                 </ion-button>
-        
+
             </ion-row>
-        </ion-grid>s
+        </ion-grid>
 
 </ion-content>
+
+<!-- On affiche la liste des indices et la possibilité de répondre -->
+<ion-button 
+    *ngIf="!hasAllIndices()"
+    class="bouton" 
+    expand="full" 
+    routerLink="/quizz" 
+    color="success"
+    style="width: 100%;
+    height: 56px;
+    margin: 0;">
+    <ion-icon class="icone" name="trophy" scope="start" style="margin-right: 3%; width: 8%;"></ion-icon>
+    <ion-text class="texte-bouton">{{indicesTrouves|indices:nbIndices}}</ion-text>
+</ion-button>
