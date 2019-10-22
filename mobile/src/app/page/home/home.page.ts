@@ -28,63 +28,11 @@ export class HomePage implements OnInit{
     q1.libelle="toto";
     q1.id='1';
     this.questions.push(q1);
+  }
 
-    var q2: Question = new Question();
-    q2.libelle="toto2";
-    q2.id='1';
-    this.questions.push(q2);
-
-    var q3: Question = new Question();
-    q3.libelle="toto3";
-    q3.id='1';
-    this.questions.push(q3);
-
-    var q1: Question = new Question();
-    q1.libelle="mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
-    q1.id='12';
-    this.questions.push(q1);
-
-    var q2: Question = new Question();
-    q2.libelle="toto2";
-    q2.id='13';
-    this.questions.push(q2);
-
-    var q3: Question = new Question();
-    q3.libelle="toto3";
-    q3.id='1';
-    this.questions.push(q3);
-
-    var q1: Question = new Question();
-    q1.libelle="toto";
-    q1.id='1';
-    this.questions.push(q1);
-
-    var q2: Question = new Question();
-    q2.libelle="toto2";
-    q2.id='1';
-    this.questions.push(q2);
-
-    var q3: Question = new Question();
-    q3.libelle="toto3";
-    q3.id='1';
-    this.questions.push(q3);
-
-    var q1: Question = new Question();
-    q1.libelle="toto";
-    q1.id='1';
-    this.questions.push(q1);
-
-    var q2: Question = new Question();
-    q2.libelle="toto2";
-    q2.id='1';
-    this.questions.push(q2);
-
-    var q3: Question = new Question();
-    q3.libelle="toto3";
-    q3.id='1';
-    this.questions.push(q3);
-
-
+  /** Methode redirigeant l'utilisateur vers la page de la question demandee */
+  redirectQuestionPage(question: Question){
+    alert(question.id);
   }
 
   /** Methode verifiant si l'utilisateur detiens tous les indices */

@@ -9,7 +9,7 @@
     </ion-header>
 
     <!-- Etat de l'écran avec des questions en attente -->
-    <ion-label *ngIf="hasQuestions()" style="padding: 15px;"> Répondez aux questions suivantes : </ion-label>
+    <ion-label *ngIf="hasQuestions()" style="padding: 15px; background-color: white;"> Répondez aux questions suivantes : </ion-label>
 
     <ion-content>
 
@@ -36,7 +36,7 @@
 
                 <!-- Etat de l'écran avec des questions en attente -->
                 <ion-list style="width: 100%"  *ngIf="hasQuestions()">
-                    <ion-item *ngFor="let question of questions">
+                    <ion-item *ngFor="let question of questions" (click) ="redirectQuestionPage(question)">
                         <ion-label>{{question.id}}.  {{question.libelle}}</ion-label>
                         <ion-icon class="icone" name="arrow-forward"></ion-icon>
                     </ion-item>  
