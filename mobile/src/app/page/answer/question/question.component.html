@@ -1,9 +1,85 @@
-<p>
-  question works!
-</p>
+<ion-header>
+    <ion-toolbar>
+        <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
+        <ion-title style="text-align: center;">Question n°{{question.id}}</ion-title>
+        <ion-buttons slot="end">
+            <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
 
-<ion-fab horizontal="start" vertical="bottom" slot="fixed">
-    <ion-fab-button color="danger" routerLink="/home">
-      <ion-icon name="ios-arrow-back"></ion-icon>
-    </ion-fab-button>
-</ion-fab>
+
+
+<ion-content>
+  <!-- Permet de centrer la page. Voir si moyen plus propre car galère en css -->
+  <ion-grid style="height: 100%">
+    <ion-row justify-content-center align-items-center style="height: 100%">
+
+       
+
+            <ion-item-group 
+                id="zone-saisie"
+                style="width: 100%;">
+                <ion-list class="formulaire">
+                    <ion-item>
+                      <p 
+                      style='margin-top: 0;
+                      padding: 0; 
+                      max-height: 200px;
+                      overflow: scroll;
+                      text-align: justify'>
+                          {{question.libelle}}
+                      </p>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="floating">
+                            <p
+                            style="display:inline-block;
+                            color: black;">Réponse</p>
+                            <p 
+                            *ngIf="errorMessage"
+                            style="display: inline-block;
+                            vertical-align: top;
+                            margin: 0;
+                            padding-left: 5px;
+                            color: red;
+                            font-style: italic;
+                            font-size: .7em;">{{errorMessage}}</p>
+                        </ion-label>
+                        <ion-input 
+                            type="text" 
+                            [(ngModel)]="reponse"
+                            tabindex="1" 
+                            style="text-align: center;"></ion-input>
+                    </ion-item>
+                </ion-list>
+                </ion-item-group>
+   
+        
+
+      </ion-row>
+    </ion-grid>
+
+    <ion-fab horizontal="start" vertical="bottom" slot="fixed">
+        <ion-fab-button color="danger" routerLink="/home">
+          <ion-icon name="home"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
+    <ion-button 
+        class="bouton" 
+        shape="round" 
+        size="large"
+        color="success"
+        style="position: fixed;
+        bottom: 5px;
+        right: 10px;
+        width: 225px;
+        height: 56px;"
+        (click) ="validerSaisie()">
+        <ion-text 
+            class="texte-bouton"
+            style="font-size: 16px;">Valider la réponse</ion-text>
+    </ion-button>
+
+</ion-content>

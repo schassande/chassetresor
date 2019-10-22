@@ -16,16 +16,16 @@ import { RulesComponent } from './page/rules/rules.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomePage/*, canActivate: [AuthGuard]*/ },
+  { path: 'home', component: HomePage, canActivate: [AuthGuard] },
   { path: 'user/login', component: UserLoginComponent},
   { path: 'user/create', component: UserEditPage},
-  { path: 'user/edit/:id', component: UserEditPage},
-  { path: 'scan', component: ScanPageComponent},
-  { path: 'admin/players', component: ManagePlayersComponent},
-  { path: 'admin/quizz', component: ManageQuizzComponent},
-  { path: 'quizz', component: QuizzComponent},
-  { path: 'question', component: QuestionComponent},
-  { path: 'rules', component: RulesComponent}
+  { path: 'user/edit/:id', component: UserEditPage, canActivate: [AuthGuard]},
+  { path: 'scan', component: ScanPageComponent, canActivate: [AuthGuard]},
+  { path: 'admin/players', component: ManagePlayersComponent, canActivate: [AuthGuard]},
+  { path: 'admin/quizz', component: ManageQuizzComponent, canActivate: [AuthGuard]},
+  { path: 'quizz', component: QuizzComponent, canActivate: [AuthGuard]},
+  { path: 'question/:id', component: QuestionComponent, canActivate: [AuthGuard]},
+  { path: 'rules', component: RulesComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

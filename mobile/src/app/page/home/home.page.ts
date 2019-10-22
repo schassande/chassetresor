@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { QuizzComponent } from '../answer/quizz/quizz.component';
-import { Quizz } from 'src/app/model/quizz';
 import { Question } from 'src/app/model/question';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +16,9 @@ export class HomePage implements OnInit{
   /** Questions en attente */
   questions: Array<Question>;
 
-  constructor() {}
+  constructor(
+    private navController: NavController
+  ) {}
 
   ngOnInit(): void {
     this.nbIndices = 11;
@@ -32,7 +33,7 @@ export class HomePage implements OnInit{
 
   /** Methode redirigeant l'utilisateur vers la page de la question demandee */
   redirectQuestionPage(question: Question){
-    alert(question.id);
+    this.navController.navigateRoot(['/question']);
   }
 
   /** Methode verifiant si l'utilisateur detiens tous les indices */

@@ -43,7 +43,6 @@ export class QuizzComponent implements OnInit {
     } else{
       this.errorMessage="Réponse incorrecte"
     }
-
   }
 
 }

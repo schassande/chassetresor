@@ -28,7 +28,7 @@
                 <ion-item routerLink="/rules">
                     <ion-icon name="help-circle" scope="start"></ion-icon>
                     <ion-menu-toggle>
-                        <ion-button fill="clear">Règles</ion-button>
+                        <ion-button fill="clear">Règles du jeu</ion-button>
                     </ion-menu-toggle>
                 </ion-item>
                 <ion-item routerLink="/admin/quizz">
@@ -60,7 +60,6 @@
     </ion-menu>
     <ion-router-outlet>
         <div style="text-align: center; margin-top: 50px; font-size: 1.5em; color: red;" *ngIf="!connectedUserService || !connectedUserService.isConnected()">
-            <p>Chagile</p>
             <img src="assets/imgs/logo.png" height="200" />
         </div>
     </ion-router-outlet>
