@@ -1,15 +1,37 @@
 <ion-header>
   <ion-toolbar>
-      <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
-      <ion-title style="text-align: center;">Gestion des joueurs</ion-title>
-      <ion-buttons slot="end">
-          <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
-      </ion-buttons>
+    <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
+    <ion-title style="text-align: center;">Gestion des joueurs</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div class="ion-padding">
-      <h2>Manage players Page</h2>
-      <p>La page de gestion des joueurs fonctionne</p>
+  <!-- Sélection du quizz -->
+  <ion-item>
+    <ion-label>Quizz</ion-label>
+    <ion-select [(ngModel)]="quizz" interface="action-sheet" (ionChange)="onChange($event)">
+      <ion-select-option value="jour1" selected="true">Jour 1</ion-select-option>
+      <ion-select-option value="jour2">Jour 2</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <!-- Liste des joueurs de ce quizz -->
+  <div *ngIf="quizz">
+    <ion-card *ngFor="let player of infoQuizz.players">
+      <ion-card-header>
+        <ion-card-title>{{player.firstName}}&nbsp;{{player.lastName}}</ion-card-title>
+        <ion-card-subtitle>{{player.mail}}</ion-card-subtitle>
+        <ion-card-subtitle>{{player.tel}}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Nombre d'indices trouvés : {{player.nbIndices}}/{{infoQuizz.nbQuestions}}
+        <br>
+        Quizz résolu : {{player.quizzSolved}}
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>
+<ion-footer>
+  <ion-button expand="block" (click)="designerVainqueur()">Désigner un vainqueur</ion-button>
+</ion-footer>
