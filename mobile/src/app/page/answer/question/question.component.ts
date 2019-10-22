@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Question } from 'src/app/model/question';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-question',
@@ -15,14 +16,10 @@ export class QuestionComponent implements OnInit {
   /** reponse */
   reponse: string;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.question = new Question();
-    this.question.id='1';
-    this.question.libelle='Qui a construit la tour perret ?'
-
-
+    this.question = JSON.parse(this.route.snapshot.paramMap.get('question'));
   }
 
   validerSaisie(){

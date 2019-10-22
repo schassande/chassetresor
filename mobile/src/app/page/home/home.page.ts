@@ -26,14 +26,19 @@ export class HomePage implements OnInit{
     this.questions= new Array<Question>();
 
     var q1: Question = new Question();
-    q1.libelle="toto";
+    q1.libelle="Qui suis-je ?";
     q1.id='1';
     this.questions.push(q1);
+
+    var q2: Question = new Question();
+    q2.libelle="Qu'est ce que l'agilité ?";
+    q2.id='2';
+    this.questions.push(q2);
   }
 
   /** Methode redirigeant l'utilisateur vers la page de la question demandee */
   redirectQuestionPage(question: Question){
-    this.navController.navigateRoot(['/question']);
+    this.navController.navigateRoot(['/question/' + JSON.stringify(question)]);
   }
 
   /** Methode verifiant si l'utilisateur detiens tous les indices */

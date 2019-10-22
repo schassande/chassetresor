@@ -24,7 +24,7 @@ const routes: Routes = [
   { path: 'admin/players', component: ManagePlayersComponent, canActivate: [AuthGuard]},
   { path: 'admin/quizz', component: ManageQuizzComponent, canActivate: [AuthGuard]},
   { path: 'quizz', component: QuizzComponent, canActivate: [AuthGuard]},
-  { path: 'question/:id', component: QuestionComponent, canActivate: [AuthGuard]},
+  { path: 'question/:question', component: QuestionComponent, canActivate: [AuthGuard]},
   { path: 'rules', component: RulesComponent, canActivate: [AuthGuard]}
 ];
 
