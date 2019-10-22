@@ -17,7 +17,7 @@ export class IndicesPipe implements PipeTransform{
             result = result.concat(fullString[i]).concat(this.SEPARATOR);
         }
 
-        return result.trim();
+        return result.trim().toUpperCase();
     }
 
 }

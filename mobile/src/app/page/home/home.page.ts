@@ -40,28 +40,13 @@ export class HomePage implements OnInit{
     this.questions.push(q3);
 
     var q1: Question = new Question();
-    q1.libelle="toto";
-    q1.id='1';
+    q1.libelle="mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm";
+    q1.id='12';
     this.questions.push(q1);
 
     var q2: Question = new Question();
     q2.libelle="toto2";
-    q2.id='1';
-    this.questions.push(q2);
-
-    /*var q3: Question = new Question();
-    q3.libelle="toto3";
-    q3.id='1';
-    this.questions.push(q3);
-
-    var q1: Question = new Question();
-    q1.libelle="toto";
-    q1.id='1';
-    this.questions.push(q1);
-
-    var q2: Question = new Question();
-    q2.libelle="toto2";
-    q2.id='1';
+    q2.id='13';
     this.questions.push(q2);
 
     var q3: Question = new Question();
@@ -82,7 +67,22 @@ export class HomePage implements OnInit{
     var q3: Question = new Question();
     q3.libelle="toto3";
     q3.id='1';
-    this.questions.push(q3);*/
+    this.questions.push(q3);
+
+    var q1: Question = new Question();
+    q1.libelle="toto";
+    q1.id='1';
+    this.questions.push(q1);
+
+    var q2: Question = new Question();
+    q2.libelle="toto2";
+    q2.id='1';
+    this.questions.push(q2);
+
+    var q3: Question = new Question();
+    q3.libelle="toto3";
+    q3.id='1';
+    this.questions.push(q3);
 
 
   }

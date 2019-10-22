@@ -37,8 +37,7 @@
                 <!-- Etat de l'écran avec des questions en attente -->
                 <ion-list style="width: 100%"  *ngIf="hasQuestions()">
                     <ion-item *ngFor="let question of questions">
-                        <ion-label>{{question.id}}</ion-label>
-                        <ion-label>{{question.libelle}}</ion-label>
+                        <ion-label>{{question.id}}.  {{question.libelle}}</ion-label>
                         <ion-icon class="icone" name="arrow-forward"></ion-icon>
                     </ion-item>  
                 </ion-list>

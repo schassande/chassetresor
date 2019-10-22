@@ -1,7 +1,7 @@
 <ion-header>
     <ion-toolbar>
         <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
-        <ion-title style="text-align: center;">Répondre à l'énigme</ion-title>
+        <ion-title style="text-align: center;">Énigme</ion-title>
         <ion-buttons slot="end">
             <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
         </ion-buttons>
@@ -13,7 +13,45 @@
     <ion-grid style="height: 100%">
       <ion-row justify-content-center align-items-center style="height: 100%">
 
+       
 
+            <ion-item-group 
+                id="zone-saisie"
+                style="width: 100%;">
+                <ion-list class="formulaire">
+                    <ion-item>
+                            <ion-row style="width: 100%;">
+                                <ion-col *ngFor="let element of indicesTrouves" size="1">
+                                        {{element}}   
+                                </ion-col>
+                            </ion-row>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="floating">
+                            <p
+                            style="display:inline-block;
+                            color: black;">Réponse</p>
+                            <p 
+                            *ngIf="errorMessage"
+                            style="display: inline-block;
+                            vertical-align: top;
+                            margin: 0;
+                            padding-left: 5px;
+                            color: red;
+                            font-style: italic;
+                            font-size: .7em;">{{errorMessage}}</p>
+                        </ion-label>
+                        <ion-input 
+                            type="text" 
+                            [(ngModel)]="reponse"
+                            maxlength="{{nbIndices}}" 
+                            tabindex="1" 
+                            style="text-align: center;"></ion-input>
+                    </ion-item>
+                </ion-list>
+                </ion-item-group>
+   
+        
 
       </ion-row>
     </ion-grid>
@@ -23,5 +61,21 @@
           <ion-icon name="ios-arrow-back"></ion-icon>
         </ion-fab-button>
     </ion-fab>
+
+    <ion-button 
+        class="bouton" 
+        shape="round" 
+        size="large"
+        color="success"
+        style="position: fixed;
+        bottom: 5px;
+        right: 10px;
+        width: 225px;
+        height: 56px;"
+        (click) ="validerSaisie()">
+        <ion-text 
+            class="texte-bouton"
+            style="font-size: 16px;">Valider la réponse</ion-text>
+    </ion-button>
    
 </ion-content>
