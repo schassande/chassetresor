@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Question } from 'src/app/model/question';
 import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-question',
@@ -16,16 +17,19 @@ export class QuestionComponent implements OnInit {
   /** reponse */
   reponse: string;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute, 
+    private navController: NavController) {}
 
   ngOnInit() {
     this.question = JSON.parse(this.route.snapshot.paramMap.get('question'));
   }
 
   validerSaisie(){
-    let reponseCorrecte: Boolean = false;
+    let reponseCorrecte: Boolean = this.reponse == '1';
     if(reponseCorrecte){
       this.errorMessage=null;
+      this.navController.navigateRoot(['/home']);
     } else{
       this.errorMessage="Réponse incorrecte"
     }

@@ -20,7 +20,8 @@ export class HomePage implements OnInit{
     private navController: NavController
   ) {}
 
-  ngOnInit(): void {
+  /** Mock */
+  initMock(): void{
     this.nbIndices = 11;
     this.indicesTrouves = 'MMMMM';
     this.questions= new Array<Question>();
@@ -34,6 +35,10 @@ export class HomePage implements OnInit{
     q2.libelle="Qu'est ce que l'agilité ?";
     q2.id='2';
     this.questions.push(q2);
+  }
+
+  ngOnInit(): void {
+    this.initMock();
   }
 
   /** Methode redirigeant l'utilisateur vers la page de la question demandee */
