@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Question } from 'src/app/model/question';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Question } from 'src/app/model/referentiels/question';
 
 @Component({
   selector: 'app-question',

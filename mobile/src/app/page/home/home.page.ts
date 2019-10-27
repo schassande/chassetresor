@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Question } from 'src/app/model/question';
 import { NavController } from '@ionic/angular';
+import { Question } from 'src/app/model/referentiels/question';
 
 @Component({
   selector: 'app-home',
@@ -26,14 +26,29 @@ export class HomePage implements OnInit{
     this.indicesTrouves = 'MMMMM';
     this.questions= new Array<Question>();
 
-    var q1: Question = new Question();
-    q1.libelle="Qui suis-je ?";
-    q1.id='1';
-    this.questions.push(q1);
+    var q1: Question = {
+      id: '1',
+      libelle: 'Qui suis-je ?',
+      nbIndices: 3,
+      reponse: null, 
+      version: null, 
+      creationDate: null, 
+      lastUpdate: null, 
+      dataStatus: null
+    };
 
-    var q2: Question = new Question();
-    q2.libelle="Qu'est ce que l'agilité ?";
-    q2.id='2';
+    var q2: Question = {
+      id: '2',
+      libelle: 'Qu\'est ce que l\'agilité ?',
+      nbIndices: 3,
+      reponse: null, 
+      version: null, 
+      creationDate: null, 
+      lastUpdate: null, 
+      dataStatus: null
+    };
+
+    this.questions.push(q1);
     this.questions.push(q2);
   }
 
