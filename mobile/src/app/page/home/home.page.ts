@@ -29,7 +29,7 @@ export class HomePage implements OnInit{
     var q1: Question = {
       id: '1',
       libelle: 'Qui suis-je ?',
-      nbIndices: 3,
+      nbIndices: 15,
       reponse: null, 
       version: null, 
       creationDate: null, 

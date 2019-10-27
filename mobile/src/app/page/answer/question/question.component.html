@@ -50,7 +50,10 @@
                             type="text" 
                             [(ngModel)]="reponse"
                             tabindex="1" 
-                            style="text-align: center;"></ion-input>
+                            style="text-align: center;"
+                            maxlength="{{question.nbIndices}}" 
+                            placeholder="{{''|indices:question.nbIndices}}"
+                            ></ion-input>
                     </ion-item>
                 </ion-list>
                 </ion-item-group>
