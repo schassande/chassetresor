@@ -1,4 +1,5 @@
 import { PersistentData } from './common';
+import { Partie } from './partie';
 
 export type AuthProvider = 'EMAIL' | 'GOOGLE' | 'FACEBOOK';
 export type AppRole = 'USER' | 'ADMIN';
@@ -15,4 +16,5 @@ export interface User extends PersistentData {
     role: AppRole;
     authProvider?: AuthProvider;
     accountStatus: AccountStatus;
+    parties?: Array<Partie>;
 }

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Question } from 'src/app/model/question';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Question } from 'src/app/model/referentiels/question';
+import { AlertController } from '@ionic/angular';
+import { Alert } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-question',
@@ -19,7 +21,8 @@ export class QuestionComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute, 
-    private navController: NavController) {}
+    private navController: NavController,
+    public alertController: AlertController) {}
 
   ngOnInit() {
     this.question = JSON.parse(this.route.snapshot.paramMap.get('question'));
@@ -33,6 +36,20 @@ export class QuestionComponent implements OnInit {
     } else{
       this.errorMessage="Réponse incorrecte"
     }
+    this.presentAlert();
   }
 
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      message: 'This is an alert message.'
+    });
+
+    await alert.present();
+    setTimeout(() => {
+      alert.dismiss();
+    }, 800);
+
+  }
+  
 }
