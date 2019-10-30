@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IndicesPipe } from 'src/app/utlis/indices.pipe';
+import { NavController } from '@ionic/angular';
+import { ValidationService } from 'src/app/service/ValidationService';
 
 @Component({
   selector: 'app-quizz',
@@ -12,16 +14,15 @@ export class QuizzComponent implements OnInit {
     nbIndices: number;
     /** Indices trouvés */
     indicesTrouves: Array<string>;
-    /** Message d'erreur */
-    errorMessage: string;
     /** reponse */
     reponse: string;
 
-  constructor() { }
+  constructor(
+    private navController: NavController,
+    private validationService: ValidationService) { }
 
   ngOnInit() {
     this.reponse='';
-    this.errorMessage=null;
     this.nbIndices = 11;
     this.initializeIndicesTab('MMMM')
   }
@@ -37,12 +38,7 @@ export class QuizzComponent implements OnInit {
   }
 
   validerSaisie(){
-    let reponseCorrecte: Boolean = false;
-    if(reponseCorrecte){
-      this.errorMessage=null;
-    } else{
-      this.errorMessage="Réponse incorrecte"
-    }
+    this.validationService.validerQuizz(this.reponse, null);
   }
 
 }
