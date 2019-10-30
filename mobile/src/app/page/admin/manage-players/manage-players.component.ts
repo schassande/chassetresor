@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { applySourceSpanToExpressionIfNeeded } from '@angular/compiler/src/output/output_ast';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-manage-players',
@@ -29,12 +30,33 @@ export class ManagePlayersComponent implements OnInit {
       nbIndices: 11,
       quizzSolved: true
     }, {
-      firstName: 'Toto',
-      lastName: 'TOTO',
-      tel: '0674839376',
-      mail: 'toto@gmail.com',
-      nbIndices: 11,
+      firstName: 'Fabien',
+      lastName: 'JOSEPH',
+      tel: '0642386486',
+      mail: 'josephfabien@gmail.com',
+      nbIndices: 10,
       quizzSolved: true
+    }, {
+      firstName: 'Frederic',
+      lastName: 'DROGO',
+      tel: '0642416879',
+      mail: 'drogofrederic@gmail.com',
+      nbIndices: 6,
+      quizzSolved: true
+    }, {
+      firstName: 'Minh',
+      lastName: 'PHAM HUU PHUT',
+      tel: '0601487653',
+      mail: 'phamhuuphutminh@gmail.com',
+      nbIndices: 2,
+      quizzSolved: false
+    }, {
+      firstName: 'Marie',
+      lastName: 'MATHIVET',
+      tel: '0689566538',
+      mail: 'mathivetmarie@gmail.com',
+      nbIndices: 10,
+      quizzSolved: false
     }]
   }, {
     nom: 'jour2',
@@ -59,17 +81,17 @@ export class ManagePlayersComponent implements OnInit {
       lastName: 'TATA',
       tel: '0643820743',
       mail: 'tata@gmail.com',
-      nbIndices: 12,
+      nbIndices: 6,
       quizzSolved: true
     }]
   }];
 
   infoQuizz = null;
 
-  constructor() { }
+  constructor(private alertCtrl: AlertController) {}
 
   ngOnInit() {
-    this.quizz='jour2';
+    this.quizz = 'jour1';
     this.onChange(event);
   }
 
@@ -78,8 +100,8 @@ export class ManagePlayersComponent implements OnInit {
    * @param $event évènement de changement de quizz sélectionné
    */
   onChange($event) {
-    for(let info of this.infosQuizz) {
-      if(info.nom == this.quizz) {
+    for (let info of this.infosQuizz) {
+      if (info.nom == this.quizz) {
         this.infoQuizz = info;
       }
     }
@@ -92,27 +114,56 @@ export class ManagePlayersComponent implements OnInit {
     let vainqueursPlausibles = [];
     let vainqueursPlausiblesReduit = [];
     let vainqueur = null;
-    for(let player of this.infoQuizz.players) {
-      if(player.quizzSolved) {
+    for (let player of this.infoQuizz.players) {
+      if (player.quizzSolved) {
         vainqueursPlausibles.push(player);
       }
     }
-    // On retire les joueurs qui n'ont pas résolu 80% des enigmes
-    for(let player of vainqueursPlausibles) {
-      if(player.nbIndices > (this.infoQuizz.nbQuestions * 80 / 100)) {
-        vainqueursPlausiblesReduit.push(player);
-      }
-    }
-    // S'il reste toujours plusieurs joueurs en courses, on tire au sort
-    // TODO : PENSER A GERER LE CAS OU AUCUN JOUEUR N'A RESOLU 80% DES ENIGMES
-    if(vainqueursPlausiblesReduit.length > 1) {
-      let randIndex = Math.floor(Math.random() * vainqueursPlausiblesReduit.length);
-      vainqueur = vainqueursPlausiblesReduit[randIndex];
-    } else {
-      vainqueur = vainqueursPlausiblesReduit[0];
-    }
 
-    console.log('Vainqueur: ', vainqueur);
+    if (vainqueursPlausibles.length == 1) {
+      vainqueur = vainqueursPlausibles[0];
+    } else {
+
+      // On retire les joueurs qui n'ont pas résolu 80% des enigmes
+      for (let player of vainqueursPlausibles) {
+        if (player.nbIndices > (this.infoQuizz.nbQuestions * 80 / 100)) {
+          vainqueursPlausiblesReduit.push(player);
+        }
+      }
+
+      // Si aucun joueur n'a résolu 80% des énigmes, on garde tous les joueurs ayant trouvé le quizz
+      if (vainqueursPlausiblesReduit.length == 0) {
+        vainqueursPlausiblesReduit = Object.assign([], vainqueursPlausibles);
+      }
+
+      // S'il reste toujours plusieurs joueurs en courses, on tire au sort
+      if (vainqueursPlausiblesReduit.length > 1) {
+        let randIndex = Math.floor(Math.random() * vainqueursPlausiblesReduit.length);
+        vainqueur = vainqueursPlausiblesReduit[randIndex];
+      } else {
+        vainqueur = vainqueursPlausiblesReduit[0];
+      }
+
+      // Désignation du vainqueur
+      if (vainqueur) {
+        this.infoQuizz.mailVainqueur = vainqueur.mail;
+        this.alertCtrl.create({
+          header: 'And the winner is...',
+          message: vainqueur.firstName + ' ' + vainqueur.lastName + ', ' + vainqueur.tel + ', ' + vainqueur.mail,
+          buttons: ['OK']
+        }).then(alert => {
+          alert.present();
+        });
+      } else {
+        this.alertCtrl.create({
+          header: 'Oups...',
+          message: 'Aucun joueur n\'a résolu le quizz pour le moment',
+          buttons: ['OK']
+        }).then(alert => {
+          alert.present();
+        });
+      }
+      
+    }
   }
-  
 }
