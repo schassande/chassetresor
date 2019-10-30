@@ -1,15 +1,24 @@
 <ion-header>
   <ion-toolbar>
-      <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
-      <ion-title style="text-align: center;">Gestion des quizz</ion-title>
-      <ion-buttons slot="end">
-          <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
-      </ion-buttons>
+    <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
+    <ion-title style="text-align: center;">Gestion des quizz</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div class="ion-padding">
-      <h2>Manage quizz Page</h2>
-      <p>La page de gestion des quizz fonctionne</p>
-  </div>
+  <ion-card *ngFor="let quizz of listQuizz">
+    <ion-card-header>
+      <ion-card-title>{{quizz.name}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      Statut : {{quizz.status}}
+      <br>
+      <section>
+        <ion-button size="small" color="success" (click)="startQuizz(quizz.name)" [disabled]="quizz.status!='Initialisé'">Démarrer</ion-button>
+        <ion-button size="small" color="warning" (click)="stopQuizz(quizz.name)" [disabled]="quizz.status!='Démarré'">Arrêter</ion-button>
+      </section>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
