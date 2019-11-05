@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Quizz } from 'src/app/model/referentiels/quizz';
+import { QuizzService } from 'src/app/service/QuizzService';
 
 @Component({
   selector: 'app-manage-quizz',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ManageQuizzComponent implements OnInit {
 
-  listQuizz=[{
+ /* listQuizz=[{
     name: 'Quizz jour 1',
     nbIndices: 11,
     gagnant: null,
@@ -21,18 +23,25 @@ export class ManageQuizzComponent implements OnInit {
     status: 'Initialisé',
     dateOfStart: null,
     dateOfEnd: null,
-  }]
+  }]*/
 
-  constructor() { }
+  listQuizz: Quizz[];
 
-  ngOnInit() {}
+  constructor(private quizzService: QuizzService) { }
+
+  ngOnInit() {
+    this.loadQuizz();
+  }
+
+  loadQuizz() {
+    this.quizzService.all().subscribe(rQuizz => this.listQuizz = rQuizz.data);
+  }
 
   startQuizz(quizzName) {
     for(let quizz of this.listQuizz) {
-      if(quizz.name == quizzName) {
-        if(quizz.status=='Initialisé') {
-          quizz.status='Démarré';
-          quizz.dateOfStart = new Date();
+      if(quizz.libelle == quizzName) {
+        if(quizz.statut=='INIT') {
+          quizz.statut='OUVERT';
         }
       }
     }
@@ -40,10 +49,9 @@ export class ManageQuizzComponent implements OnInit {
 
   stopQuizz(quizzName) {
     for(let quizz of this.listQuizz) {
-      if(quizz.name == quizzName) {
-        if(quizz.status=='Démarré') {
-          quizz.status='Arrêté';
-          quizz.dateOfEnd = new Date();
+      if(quizz.libelle == quizzName) {
+        if(quizz.statut=='OUVERT') {
+          quizz.statut='FERME';
         }
       }
     }
