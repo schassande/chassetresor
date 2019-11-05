@@ -20,12 +20,24 @@
 <ion-content *ngIf="user">
     <ion-list style="width: 100%;">
         <ion-item>
-            <ion-label fixed>Email</ion-label>
-            <ion-input type="text" [(ngModel)]="user.email" id="email" name="email" min="3" max="30" #email="ngModel" required tabindex="4"></ion-input>
+            <ion-label position="floating">Email <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input required type="text" [(ngModel)]="user.email" id="email" name="email" #email="ngModel" min="5" max="50"></ion-input>
         </ion-item>
         <ion-item>
-            <ion-label fixed>Password</ion-label>
-            <ion-input type="password" [(ngModel)]="user.password" max="15" tabindex="5"></ion-input>
+            <ion-label position="floating">Mot de passe <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input required type="password" [(ngModel)]="user.password" id="password" name="password" #password="ngModel" min="5" max="15"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Nom <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input required type="text" [(ngModel)]="user.lastName" id="lastName" name="lastName" #lastName="ngModel"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Prénom <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input required type="text" [(ngModel)]="user.firstName" id="firstName" name="firstName" #firstName="ngModel"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Téléphone <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input required type="tel" [(ngModel)]="user.phone" id="phone" name="phone" #phone="ngModel"></ion-input>
         </ion-item>
     </ion-list>
     <div round *ngIf="error.length > 0" class="alert alert-danger">
@@ -36,6 +48,11 @@
     </div>
     <div style="text-align: center;">
         <ion-button shape="round" color="danger" (click)="deleteAccount()" *ngIf="user.dataStatus !== 'NEW'">Delete Account</ion-button>
-        <ion-button shape="round" (click)="newUser($event)" [disabled]="email.invalid && !saving">Save</ion-button>
+        <ion-button shape="round" (click)="newUser($event)" [disabled]="(email.invalid || password.invalid || lastName.invalid || firstName.invalid || phone.invalid) && !saving">Save</ion-button>
     </div>
 </ion-content>
+<ion-footer>
+<div style="padding: 5px">
+    <ion-text color="danger" style="font-size: x-small">* : Champs obligatoires. Toutes les informations de ce formulaire sont à usage uniquement de l'application Chasse au Trésor Agile Grenoble 2019 par Sopra Steria. Vos informations personnelles ne seront utilisées que pour vous contacter dans l'éventualité où vous remporteriez un lot</ion-text>
+</div>
+</ion-footer>

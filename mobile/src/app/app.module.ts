@@ -24,11 +24,29 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { environment } from '../environments/environment';
 import { UserService } from './service/UserService';
+import { ScanPageComponent } from './page/scan-page/scan-page.component';
+import { HomePage } from './page/home/home.page';
+import { ManagePlayersComponent } from './page/admin/manage-players/manage-players.component';
+import { ManageQuizzComponent } from './page/admin/manage-quizz/manage-quizz.component';
+import { QuizzComponent } from './page/answer/quizz/quizz.component';
+import { QuestionComponent } from './page/answer/question/question.component';
+import { RulesComponent } from './page/rules/rules.component';
+import { IndicesPipe } from './utlis/indices.pipe';
+import { ValidationService } from './service/ValidationService';
 
 @NgModule({
-  declarations: [AppComponent,
+  declarations: [
+    IndicesPipe,
+    HomePage,
+    ManagePlayersComponent,
+    ManageQuizzComponent,
+    QuizzComponent,
+    QuestionComponent,
+    AppComponent,
     UserLoginComponent,
-    UserEditPage],
+    UserEditPage,
+    ScanPageComponent,
+    RulesComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -50,6 +68,7 @@ import { UserService } from './service/UserService';
     AppSettingsService,
     ConnectedUserService,
     UserService,
+    ValidationService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

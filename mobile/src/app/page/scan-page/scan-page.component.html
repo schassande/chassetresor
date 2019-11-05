@@ -1,7 +1,7 @@
 <ion-header>
     <ion-toolbar>
         <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
-        <ion-title style="text-align: center;">Chagile</ion-title>
+        <ion-title style="text-align: center;">Scanner un code</ion-title>
         <ion-buttons slot="end">
             <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
         </ion-buttons>
@@ -9,7 +9,13 @@
 </ion-header>
 <ion-content>
     <div class="ion-padding">
-        The world is your oyster.
-        <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
+        <h2>Scan Page</h2>
+        <p>La page de scan fonctionne</p>
     </div>
+
+    <ion-fab horizontal="start" vertical="bottom" slot="fixed">
+        <ion-fab-button color="danger" routerLink="/home">
+            <ion-icon name="home"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 </ion-content>

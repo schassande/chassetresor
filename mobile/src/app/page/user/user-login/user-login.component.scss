@@ -1,0 +1,57 @@
+#zone-bouton, #zone-saisie, .formulaire, #zone-presentation{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/** CSS de la zone de presentation */
+#logo{
+    width: 100%;
+}
+.texte-presentation:first-child{
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-weight: bold;
+} 
+.texte-presentation
+{
+    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/** CSS de la zone de saisie */
+.controle_label{
+    display:inline-block;
+    color: black;
+}
+
+.error_label{
+    display:inline-block;
+    vertical-align: top;
+    margin: 0;
+    padding-left: 5px;
+    color: red;
+    font-style: italic;
+    font-size: .7em;
+}
+
+/** CSS de la zone de validation */
+.bouton{
+    margin-top: 10px;
+    padding: 0;
+}
+.bouton:last-child{
+    margin-bottom: 10px;
+}
+.bouton *{
+    margin: 0;
+    padding: 0;
+}
+.bouton .icone{
+    margin-right: 5px;
+}
+.bouton .texte-bouton{
+    width: 210px;
+}

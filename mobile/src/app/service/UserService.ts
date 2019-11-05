@@ -338,6 +338,9 @@ export class UserService  extends RemotePersistentDataService<User> {
             dataStatus: 'NEW',
             email: cred.user.email,
             password: '',
+            firstName: '',
+            lastName: '',
+            phone: null,
             token: null
         };
     }

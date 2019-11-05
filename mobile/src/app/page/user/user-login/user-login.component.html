@@ -1,43 +1,48 @@
-<ion-header>
-    <ion-toolbar>
-        <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
-        <ion-title style="text-align: center;">Login</ion-title>
-    </ion-toolbar>
-</ion-header>
 <ion-content>
-    <div style="text-align: center; margin-top: 30px;"><img src="assets/imgs/logo.png" height="120" /></div>
-    <div style="text-align: center; margin: 10px 0;">Bienvenue sur la chasse au tresor Sopra Steria!<br><br>Svp veuillez entrer votre email et votre mot de passe pour s'authentifier ou pour creer un compte.</div>
-    <ion-list>
-        <ion-item>
-            <ion-label position="stacked">Email</ion-label>
-            <ion-input type="email" [(ngModel)]="email" tabindex="1"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label position="stacked">Mot de passe</ion-label>
-            <ion-input type="password" [(ngModel)]="password" tabindex="2"></ion-input>
-        </ion-item>
-        <ion-item style="text-align: right;">
-            <ion-label>Memoriser sur le periphérique&nbsp;</ion-label>
-            <ion-checkbox scope="end " [checked]="savePassword "></ion-checkbox>
-        </ion-item>
-    </ion-list>
-    <div style="text-align: right; margin-right: 10px; ">
-        <a (click)="resetPassword() ">Réinitialiser le mot de passe</a> &nbsp;
-    </div>
-    <div *ngIf="errors && errors.length " style="margin: 5px 20px ">
-        <div style="color: red; ">Erreurs:</div>
-        <ul>
-            <li *ngFor="let error of errors ">{{error}}</li>
-        </ul>
-    </div>
-    <div style="text-align: center; margin-top: 20px; ">
-        <ion-button shape="round " color="success " size="large " (click)="createAccount() ">
-            <ion-icon name="add " scope="start "></ion-icon>
-            Creer un compte
-        </ion-button>
-        <ion-button shape="round " size="large " (click)="login() ">
-            <ion-icon name="log-in " scope="start "></ion-icon>
-            Se connecter
-        </ion-button>
-    </div>
+
+    <!-- Permet de centrer la page. Voir si moyen plus propre car galère en css -->
+    <ion-grid style="height: 100%">
+        <ion-row justify-content-center align-items-center style="height: 100%">
+                
+            <ion-item-group id="zone-presentation">
+                <p class="texte-presentation">Bienvenue sur la chasse au trésor</p>
+                <img id="logo" src="assets/imgs/soprasteria_logo1.jpg"/>
+            </ion-item-group>
+
+            <ion-item-group id="zone-saisie">
+                <ion-list class="formulaire">
+                    <ion-item>
+                        <ion-label position="floating">
+                            <p class="controle_label">Email</p>
+                            <p class="error_label" *ngIf="err_saisie_email">{{err_saisie_email}}</p>
+                        </ion-label>
+                        <ion-input type="email" pattern="email" [(ngModel)]="email" tabindex="1"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="floating">
+                            <p class="controle_label">Mot de passe</p>
+                            <p class="error_label" *ngIf="err_saisie_mdp">{{err_saisie_mdp}}</p>
+                        </ion-label>
+                        <ion-input type="password" [(ngModel)]="password" tabindex="2"></ion-input>
+                    </ion-item>
+                    <ion-item style="text-align: right;">
+                        <ion-label>Memoriser sur le periphérique&nbsp;</ion-label>
+                        <ion-checkbox scope="end " [checked]="savePassword "></ion-checkbox>
+                    </ion-item>
+                </ion-list>
+            </ion-item-group>
+
+            <ion-item-group id="zone-bouton">
+                <ion-button class="bouton" shape="round" color="success" size="large" (click)="createAccount()">
+                    <ion-icon class="icone" name="add" scope="start"></ion-icon>
+                    <ion-text class="texte-bouton">Creer un compte</ion-text>
+                </ion-button>
+                <ion-button class="bouton" shape="round" size="large" (click)="login()">
+                    <ion-icon class="icone" name="log-in" scope="start"></ion-icon>
+                    <ion-text class="texte-bouton">Se connecter</ion-text>
+                </ion-button>
+            </ion-item-group>
+    
+        </ion-row>
+    </ion-grid>
 </ion-content>
