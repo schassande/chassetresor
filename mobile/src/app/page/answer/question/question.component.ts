@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Question } from 'src/app/model/referentiels/question';
-import { AlertController } from '@ionic/angular';
 import { ValidationService } from 'src/app/service/ValidationService';
+import { UserQuestion } from 'src/app/model/quizz';
 
 @Component({
   selector: 'app-question',
@@ -12,7 +11,7 @@ import { ValidationService } from 'src/app/service/ValidationService';
 export class QuestionComponent implements OnInit {
 
   /** Question à trouver */
-  question: Question;
+  question: UserQuestion;
   /** reponse */
   reponse: string;
 

@@ -3,7 +3,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 
 import { Injectable } from '@angular/core';
 import { RemotePersistentDataService } from './RemotePersistentDataService';
-import { Quizz } from '../model/referentiels/quizz';
+import { Quizz } from '../model/quizz';
 
 @Injectable()
 export class QuizzService  extends RemotePersistentDataService<Quizz> {
@@ -21,6 +21,14 @@ export class QuizzService  extends RemotePersistentDataService<Quizz> {
 
     getPriority(): number {
         return 1;
+    }
+
+    /**
+     * Methode récupérant le quizz actif
+     * @returns le <Quizz> actif
+     */
+    getActiveQuizz(): Quizz {
+        return;
     }
 
 }

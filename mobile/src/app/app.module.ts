@@ -33,6 +33,8 @@ import { QuestionComponent } from './page/answer/question/question.component';
 import { RulesComponent } from './page/rules/rules.component';
 import { IndicesPipe } from './utlis/indices.pipe';
 import { ValidationService } from './service/ValidationService';
+import { UserResponseService } from './service/UserResponseService';
+import { QuizzService } from './service/QuizzService';
 
 @NgModule({
   declarations: [
@@ -69,6 +71,8 @@ import { ValidationService } from './service/ValidationService';
     ConnectedUserService,
     UserService,
     ValidationService,
+    UserResponseService,
+    QuizzService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
