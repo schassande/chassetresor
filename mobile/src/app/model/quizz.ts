@@ -18,6 +18,8 @@ export interface Quizz extends PersistentData {
         libelle: string;
         /** Reponse attendue */
         reponse: string;
+        /** Indice donné en récompense à une question validée */
+        indice: string;
     }[];
     /** Gagnant tiré au sort parmis les répondants */
     gagnant: {
