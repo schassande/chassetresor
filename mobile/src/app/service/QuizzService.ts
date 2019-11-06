@@ -1,4 +1,4 @@
-import { ToastController } from '@ionic/angular';
+import { ToastController, AlertController } from '@ionic/angular';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import { Injectable } from '@angular/core';
@@ -11,6 +11,7 @@ export class QuizzService  extends RemotePersistentDataService<Quizz> {
     constructor(
         db: AngularFirestore,
         toastController: ToastController,
+        public alertController: AlertController
     ) {
         super(db, toastController);
     }
@@ -24,10 +25,20 @@ export class QuizzService  extends RemotePersistentDataService<Quizz> {
     }
 
     /**
-     * Methode récupérant le quizz actif
-     * @returns le <Quizz> actif
+     * Methode récupérant l'identifiant du quizz actif
+     * @returns identifiant du quizz actif
      */
-    getActiveQuizz(): Quizz {
+    getActiveQuizzId(): string {
+        this.all().subscribe((result) => {
+            result.data.forEach(element => {
+                if(element.statut == 'OUVERT'){
+                    return element.id;
+                }
+            });
+        }, (error) => {
+            console.log(error);
+        });
+          
         return;
     }
 

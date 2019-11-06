@@ -34,7 +34,7 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
      * @returns UserResponse
      */
     getUserResponse(userId: string, quizzId: string): UserResponse{
-
+        return;
         /** Recherche d'un UserResponse existant pour le quizz actif et l'utilisateur courant */
         var userResponse: UserResponse;
         this.get(userId.concat(quizzId)).subscribe(result => userResponse = result.data); //TODO tester
@@ -42,7 +42,7 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
         /** Si l'objet userResponse n'existe pas, alors on le crée */
         if(!userResponse){
             /** Récupération du quizz actif */
-            var quizz: Quizz = this.quizzService.getActiveQuizz();
+            var quizz: Quizz = this.quizzService.getActiveQuizzId();
             /** Valorisation du UserResponse avec les informations du quizz */
             userResponse = {
                 userId: userId,

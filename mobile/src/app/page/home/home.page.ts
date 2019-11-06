@@ -3,6 +3,7 @@ import { NavController } from '@ionic/angular';
 import { UserQuestion, UserResponse } from 'src/app/model/quizz';
 import { UserResponseService } from 'src/app/service/UserResponseService';
 import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
+import { QuizzService } from 'src/app/service/QuizzService';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,8 @@ import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
 })
 export class HomePage implements OnInit{
 
+  /** Identifiant du quizz Actif */
+  quizzId: string;
   /** Nombre d'indices à trouver */
   nbIndices: number = 0;
   /** Indices trouvés */
@@ -21,16 +24,17 @@ export class HomePage implements OnInit{
   constructor(
     private navController: NavController,
     private userResponseService: UserResponseService,
-    private connectedUserService: ConnectedUserService) {}
+    private connectedUserService: ConnectedUserService,
+    private quizzService: QuizzService) {}
 
   ngOnInit(): void {
     
     /** Récupération du quizzCourrant */
-    var quizzId: string = ''; //TODO
+    this.quizzId = this.quizzService.getActiveQuizzId(); //TODO
     /** Récupération de l'identifiant utilisateur */
     var userId: string = this.connectedUserService.getCurrentUser().id;
     /** Récupération de UserResponse */
-    var userReponse: UserResponse = this.userResponseService.getUserResponse(userId, quizzId);
+    var userReponse: UserResponse = this.userResponseService.getUserResponse(userId, this.quizzId);
     
     /** Initialisation des valeurs de l'écran avec UserResponse */
     if(userReponse){
