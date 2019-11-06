@@ -42,7 +42,7 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
         /** Si l'objet userResponse n'existe pas, alors on le crée */
         if(!userResponse){
             /** Récupération du quizz actif */
-            var quizz: Quizz = this.quizzService.getActiveQuizzId();
+            var quizz: Quizz = this.quizzService.getActiveQuizz();
             /** Valorisation du UserResponse avec les informations du quizz */
             userResponse = {
                 userId: userId,

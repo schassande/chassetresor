@@ -25,21 +25,29 @@ export class QuizzService  extends RemotePersistentDataService<Quizz> {
     }
 
     /**
-     * Methode récupérant l'identifiant du quizz actif
-     * @returns identifiant du quizz actif
+     * Methode récupérant le quizz actif
+     * @returns le <Quizz> actif
      */
-    getActiveQuizzId(): string {
+    getActiveQuizz(): Quizz {
         this.all().subscribe((result) => {
             result.data.forEach(element => {
                 if(element.statut == 'OUVERT'){
-                    return element.id;
+                    return element;
                 }
             });
         }, (error) => {
             console.log(error);
         });
-          
         return;
+    }
+
+    /**
+     * Methode récupérant l'identifiant du quizz actif
+     * @returns identifiant du quizz actif
+     */
+    getActiveQuizzId(): string {
+        var activeQuizz: Quizz = this.getActiveQuizz();
+        return activeQuizz ? activeQuizz.id : null;
     }
 
 }

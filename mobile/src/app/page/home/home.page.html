@@ -1,4 +1,4 @@
-<ion-header>
+    <ion-header>
         <ion-toolbar>
             <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
             <ion-title style="text-align: center;">Accueil</ion-title>
@@ -17,6 +17,11 @@
         <ion-grid style="height: 100%">
             <ion-row justify-content-center align-items-center style="height: 100%">
  
+                <!-- Etat : Aucun quizz de disponnible -->
+                <label *ngIf="!quizzId">
+                    Le quizz n'est pas disponnible pour le moment
+                </label>
+
                 <!-- Etat initial de l'écran-->
                 <ion-button 
                     class="bouton" 
@@ -49,7 +54,7 @@
                     size="large"
                     routerLink="/quizz"
                     color="success"
-                    *ngIf="hasAllIndices() &&  !hasQuestions()">
+                    *ngIf="hasAllIndices() &&  !hasQuestions() && quizzId">
                     <ion-icon 
                         class="icone" 
                         name="trophy" 
