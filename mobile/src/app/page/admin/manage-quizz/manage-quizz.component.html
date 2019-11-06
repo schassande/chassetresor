@@ -10,14 +10,14 @@
 <ion-content>
   <ion-card *ngFor="let quizz of listQuizz">
     <ion-card-header>
-      <ion-card-title>{{quizz.name}}</ion-card-title>
+      <ion-card-title>{{quizz.libelle}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      Statut : {{quizz.status}}
+      Statut : {{quizz.statut}}
       <br>
       <section>
-        <ion-button size="small" color="success" (click)="startQuizz(quizz.name)" [disabled]="quizz.status!='Initialisé'">Démarrer</ion-button>
-        <ion-button size="small" color="warning" (click)="stopQuizz(quizz.name)" [disabled]="quizz.status!='Démarré'">Arrêter</ion-button>
+        <ion-button size="small" color="success" (click)="startQuizz(quizz.libelle)" [disabled]="quizz.statut!='INIT'">Démarrer</ion-button>
+        <ion-button size="small" color="warning" (click)="stopQuizz(quizz.libelle)" [disabled]="quizz.statut!='OUVERT'">Arrêter</ion-button>
       </section>
     </ion-card-content>
   </ion-card>
