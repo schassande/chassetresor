@@ -4,6 +4,8 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Injectable } from '@angular/core';
 import { RemotePersistentDataService } from './RemotePersistentDataService';
 import { Quizz } from '../model/quizz';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class QuizzService  extends RemotePersistentDataService<Quizz> {
@@ -28,26 +30,37 @@ export class QuizzService  extends RemotePersistentDataService<Quizz> {
      * Methode récupérant le quizz actif
      * @returns le <Quizz> actif
      */
-    getActiveQuizz(): Quizz {
-        this.all().subscribe((result) => {
-            result.data.forEach(element => {
-                if(element.statut == 'OUVERT'){
-                    return element;
+    getActiveQuizz(): Observable<Quizz> {
+        return this.all().pipe(
+            map( (rQuizzs) => {
+                var result;
+                if (rQuizzs.data) {
+                    rQuizzs.data.forEach(element => {
+                        if(element.statut == "OUVERT")
+                        { 
+                            result = element; 
+                        }
+                    });
                 }
-            });
-        }, (error) => {
-            console.log(error);
-        });
-        return;
-    }
+                return result;
+            })
+        )
+    };
 
     /**
      * Methode récupérant l'identifiant du quizz actif
      * @returns identifiant du quizz actif
      */
-    getActiveQuizzId(): string {
-        var activeQuizz: Quizz = this.getActiveQuizz();
-        return activeQuizz ? activeQuizz.id : null;
+    getActiveQuizzId(): Observable<string> {
+        return this.getActiveQuizz().pipe(
+            map( (rQuizz) => {
+                var result;
+                if (rQuizz) {
+                    result = rQuizz.id;
+                }
+                return result;
+            })
+        );
     }
 
 }
