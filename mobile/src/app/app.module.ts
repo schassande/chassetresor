@@ -35,6 +35,7 @@ import { IndicesPipe } from './utlis/indices.pipe';
 import { UserResponseService } from './service/UserResponseService';
 import { QuizzService } from './service/QuizzService';
 import { ValidationService } from './service/ValidationService';
+import { MessageService } from './service/MessageService';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { ValidationService } from './service/ValidationService';
     UserResponseService,
     QuizzService,
     ValidationService,
+    MessageService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
