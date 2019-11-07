@@ -37,7 +37,7 @@ export class ValidationService {
         .then(function(rActiveQuizz){
             /** Pas de quizz actif */
             if(!rActiveQuizz){
-                vm.showMessage('Le quizz n\'est plus actif','validationPopupRed');
+                vm.showMessage('Le quiz n\'est plus ouvert','validationPopupRed');
                 vm.navController.navigateRoot(['/home']);
                 return;
             } else{
@@ -72,6 +72,7 @@ export class ValidationService {
                         rUserResponse.reponsesQuestions.forEach(element => {
                             if(element.questionId == questionId) { 
                                 element.statut = 'VALIDE';
+                                element.reponse = reponseUtilisateur;
                             }
                         });
                         return rUserResponse;
@@ -105,20 +106,48 @@ export class ValidationService {
        * @param reponseUtilisateur 
        * @param quizzId 
        */
-      validerQuizz(reponseUtilisateur:string, quizzId: string) {
-
-        return;
-
-
-        //TODO
-        //let reponseValidation: Boolean = pReponse == '1';
-        
-        /*if(reponseValidation){
-          this.showMessage('Vous avez résolu l\'énigme','validationPopupGreen');
-          this.navController.navigateRoot(['/home']);
-        } else{
-          this.showMessage('Réponse incorrecte','validationPopupRed');
-        }*/
+      validerQuizz(reponseUtilisateur:string, quizzId: string, userId: string): Promise<boolean> {
+        var vm = this;
+        /** Recuperation du quizz */
+        return this.quizzService.get(quizzId).toPromise().then(function(rQuizz){
+            /** Le quizz n'a pas été récupéré */
+            if(!rQuizz.data){
+                vm.showMessage('Erreur lors de la récupération du quiz','validationPopupRed');
+                return false;
+            } else if (rQuizz.data.statut != 'OUVERT') {
+                vm.showMessage('Le quiz n\'est plus ouvert','validationPopupRed');
+                return false;
+            } else if (rQuizz.data.reponse.toUpperCase() != reponseUtilisateur.toUpperCase()){
+                vm.showMessage('Réponse incorrecte','validationPopupRed');
+                return false;
+            } else {
+                return true;
+            }
+        }).then(function(isValid){
+            if(!isValid){
+                return false;
+            } else{
+                /** On met à jour le userResponse */
+                return vm.userResponseService.getUserResponse(userId, quizzId).toPromise().then(function(rUserResponse){
+                    if(!rUserResponse){
+                        vm.showMessage('Un problème est survenu lors de la récupération des informations utilisateur','validationPopupRed');
+                        return false;
+                    } else {
+                        rUserResponse.statut = 'FINI';
+                        rUserResponse.reponseQuizz = reponseUtilisateur;
+                        return vm.userResponseService.save(rUserResponse).toPromise().then(function(rUserResponse){
+                            if(!rUserResponse.data){
+                                vm.showMessage('Un problème est survenu lors de la mise à jour des informations utilisateur','validationPopupRed');
+                            } else{
+                                vm.showMessage('Vous avez résolu l\'énigme','validationPopupGreen');
+                                vm.navController.navigateRoot(['/home']);
+                                return true;
+                            }
+                        })
+                    }
+                })
+            }
+        })
       }
     
     /**

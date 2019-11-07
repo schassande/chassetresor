@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { IndicesPipe } from 'src/app/utlis/indices.pipe';
-import { NavController } from '@ionic/angular';
 import { ValidationService } from 'src/app/service/ValidationService';
+import { QuizzService } from 'src/app/service/QuizzService';
+import { UserResponseService } from 'src/app/service/UserResponseService';
+import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
 
 @Component({
   selector: 'app-quizz',
@@ -10,21 +12,42 @@ import { ValidationService } from 'src/app/service/ValidationService';
 })
 export class QuizzComponent implements OnInit {
 
+    /** Identifiant du quizz Actif */
+    quizzId: string;
     /** Nombre d'indices à trouver */
-    nbIndices: number;
+    nbIndices: number = 0;
     /** Indices trouvés */
-    indicesTrouves: Array<string>;
+    indicesTrouves: Array<string> = [];
     /** reponse */
-    reponse: string;
+    reponse: string = '';
 
   constructor(
-    private navController: NavController,
-    private validationService: ValidationService) { }
+    private validationService: ValidationService,
+    private quizzService: QuizzService,
+    private userResponseService: UserResponseService,
+    private connectedUserService: ConnectedUserService,
+    private changeRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
-    this.reponse='';
-    this.nbIndices = 11;
-    this.initializeIndicesTab('MMMM')
+    this.loadValues();
+  }
+
+  loadValues() {
+    var vm = this;
+    /** Etape 1 : Récupération de l'identifiant du Quizz courant */
+    this.quizzService.getActiveQuizzId().toPromise().then(function(rQuizzId){
+      vm.quizzId = rQuizzId;
+      /** Etape 2 : Récupération de UserResponse */
+      return vm.userResponseService.getUserResponse(vm.connectedUserService.getCurrentUser().id, vm.quizzId).toPromise()
+    }).then(function(rUserResponse){
+      /** Etape 3 : Initialisation des valeurs de l'écran avec UserResponse */
+      if(rUserResponse){
+        vm.nbIndices = rUserResponse.reponsesQuestions.length;
+        vm.initializeIndicesTab(rUserResponse.indicesTrouves);
+      }
+      vm.changeRef.detectChanges();
+    })
   }
 
   initializeIndicesTab(indices: string){
@@ -38,7 +61,7 @@ export class QuizzComponent implements OnInit {
   }
 
   validerSaisie(){
-    this.validationService.validerQuizz(this.reponse, null);
+    this.validationService.validerQuizz(this.reponse,this.quizzId,this.connectedUserService.getCurrentUser().id);
   }
 
 }
