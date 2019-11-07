@@ -39,7 +39,7 @@ export type UserResponseStatut = 'EN_COURS' | 'FINI';
 export interface UserResponse extends PersistentData {
 
     /** Reference l'identifiant de l'utilisateur */
-    userId: string; 
+    userId: string;
     /** Reference l'identifiant du quizz */
     quizzId: string;
     /** Reponse de l'utilisateur pour le quizz */
