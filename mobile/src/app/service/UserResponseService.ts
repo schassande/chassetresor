@@ -7,6 +7,7 @@ import { UserResponse } from '../model/quizz';
 import { QuizzService } from './QuizzService';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import * as firebase from 'firebase';
 
 @Injectable()
 export class UserResponseService  extends RemotePersistentDataService<UserResponse> {
@@ -20,7 +21,7 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
     }
 
     getLocalStoragePrefix(): string {
-        return 'useruesponse';
+        return 'userresponse';
     }
 
     getPriority(): number {
@@ -35,11 +36,11 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
      * @returns UserResponse
      */
     getUserResponse(userId: string, quizzId: string): Observable<UserResponse>{
-        return this.get(userId.concat(quizzId)).pipe(
-            map( (rUserResponse) => {
-                return rUserResponse.data;
-            })
-        )
+        return this.queryOne(this.getCollectionRef().where('userId', '==', userId).where('quizzId','==',quizzId), 'default').pipe(
+            map((ruser => {
+                return ruser.data;
+            }))
+        );
     }
 
     /**
@@ -68,7 +69,7 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
                         indicesTrouves: '',
                         reponsesQuestions: [],
                         // On donne pour clé primaire la concaténation des deux ID pour simplifier la recherche
-                        id: userId.concat(quizzId), 
+                        id: null, 
                         creationDate: new Date(),
                         dataStatus: "NEW",
                         lastUpdate: new Date(),
