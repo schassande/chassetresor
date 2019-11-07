@@ -85,6 +85,11 @@ export class HomePage implements OnInit{
     this.navController.navigateRoot(['/question/' + JSON.stringify(question)]);
   }
 
+  /** Methode redirigeant l'utilisateur vers la page de réponse au quiz */
+  redirectQuizzPage(question: UserQuestion){
+    this.navController.navigateRoot(['/quizz']);
+  }
+
   /** Methode verifiant si l'utilisateur detiens tous les indices */
   hasAllIndices(): boolean{
     return this.indicesTrouves.length == this.nbIndices;

@@ -64,5 +64,4 @@ export class QuizzService  extends RemotePersistentDataService<Quizz> {
             })
         );
     }
-
 }

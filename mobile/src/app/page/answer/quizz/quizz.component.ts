@@ -14,7 +14,7 @@ export type PageStatus =  'CHARGEMENT' | 'QUIZZ_INDISPONIBLE' | 'QUIZZ_DISPONBIL
 })
 export class QuizzComponent implements OnInit {
 
-    /** Statut de la page */
+    /** Statut de la page utilisé pour les differentes configurations de l'écran */
     pageStatus: PageStatus;
 
     /** Identifiant du quizz Actif */
@@ -53,6 +53,7 @@ export class QuizzComponent implements OnInit {
       if(rUserResponse){
         vm.nbIndices = rUserResponse.reponsesQuestions.length;
         vm.initializeIndicesTab(rUserResponse.indicesTrouves);
+        vm.isQuizzValide = rUserResponse.statut == 'FINI';
       }
       vm.changeRef.detectChanges();
     }).finally(function(){
