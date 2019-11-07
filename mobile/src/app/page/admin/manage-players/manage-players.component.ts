@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { applySourceSpanToExpressionIfNeeded } from '@angular/compiler/src/output/output_ast';
 import { AlertController } from '@ionic/angular';
+import { QuizzService } from 'src/app/service/QuizzService';
+import { Quizz } from 'src/app/model/quizz';
+import { Observable } from 'rxjs';
+import { ResponseWithData } from 'src/app/service/response';
+import { map, flatMap } from 'rxjs/operators';
+import { ManagePlayersService } from './manage-players.service';
+import { Player } from './player';
 
 @Component({
   selector: 'app-manage-players',
@@ -9,90 +15,55 @@ import { AlertController } from '@ionic/angular';
 })
 export class ManagePlayersComponent implements OnInit {
 
-  quizz = null;
-
-  infosQuizz = [{
-    nom: 'jour1',
-    nbQuestions: 11,
-    mailVainqueur: null,
-    players: [{
-      firstName: 'Alexis',
-      lastName: 'BOUVARD',
-      tel: '0646422970',
-      mail: 'bouvardalexis@gmail.com',
-      nbIndices: 6,
-      quizzSolved: false
-    }, {
-      firstName: 'Emilien',
-      lastName: 'CARRIGNON',
-      tel: '0612345678',
-      mail: 'carrignonemilien@gmail.com',
-      nbIndices: 11,
-      quizzSolved: true
-    }, {
-      firstName: 'Fabien',
-      lastName: 'JOSEPH',
-      tel: '0642386486',
-      mail: 'josephfabien@gmail.com',
-      nbIndices: 10,
-      quizzSolved: true
-    }, {
-      firstName: 'Frederic',
-      lastName: 'DROGO',
-      tel: '0642416879',
-      mail: 'drogofrederic@gmail.com',
-      nbIndices: 6,
-      quizzSolved: true
-    }, {
-      firstName: 'Minh',
-      lastName: 'PHAM HUU PHUT',
-      tel: '0601487653',
-      mail: 'phamhuuphutminh@gmail.com',
-      nbIndices: 2,
-      quizzSolved: false
-    }, {
-      firstName: 'Marie',
-      lastName: 'MATHIVET',
-      tel: '0689566538',
-      mail: 'mathivetmarie@gmail.com',
-      nbIndices: 10,
-      quizzSolved: false
-    }]
-  }, {
-    nom: 'jour2',
-    nbQuestions: 12,
-    mailVainqueur: null,
-    players: [{
-      firstName: 'Tutu',
-      lastName: 'TUTU',
-      tel: '0601845429',
-      mail: 'tutu@gmail.com',
-      nbIndices: 3,
-      quizzSolved: false
-    }, {
-      firstName: 'Tete',
-      lastName: 'TETE',
-      tel: '0609824311',
-      mail: 'tete@gmail.com',
-      nbIndices: 7,
-      quizzSolved: true
-    }, {
-      firstName: 'Tata',
-      lastName: 'TATA',
-      tel: '0643820743',
-      mail: 'tata@gmail.com',
-      nbIndices: 6,
-      quizzSolved: true
-    }]
-  }];
-
   infoQuizz = null;
 
-  constructor(private alertCtrl: AlertController) {}
+  /** La liste des quizz */
+  listQuizz: Quizz[];
 
+  /** Index du quizz selctionné */
+  selectedQuizzIdx: number = 0;
+
+  /** La liste des joueurs du quizz selectionné */
+  listPlayers: Player[];
+
+  /** Constructeur */
+  constructor(
+    private alertCtrl: AlertController,
+    private quizzService: QuizzService,
+    private managePlayersService: ManagePlayersService) { }
+
+  /** Méthode exécutée à l'initialisation de l'écran */
   ngOnInit() {
-    this.quizz = 'jour1';
-    this.onChange(event);
+    this.loadData();
+  }
+
+  /** Méthode de chargement des données de l'écran */
+  loadData() {
+    this.loadQuizz().pipe(
+      flatMap(() => {
+        return this.loadPlayers();
+      })
+    ).subscribe();
+  }
+
+  /** Fonction permettant le chargement tous les quizz présents en base */
+  loadQuizz(): Observable<ResponseWithData<Quizz[]>> {
+    return this.quizzService.all().pipe(
+      map(rQuizz => {
+        this.listQuizz = rQuizz.data;
+        return rQuizz;
+      })
+    );
+  }
+
+  /** Fonction permettant le chargement tous les joueurs présents en base */
+  loadPlayers(): Observable<Player[]> {
+    return this.managePlayersService.loadPlayers(this.listQuizz[this.selectedQuizzIdx].id).pipe(
+      map(rPlayers => {
+        this.listPlayers = rPlayers;
+        return rPlayers;
+      })
+    );
   }
 
   /**
@@ -100,22 +71,19 @@ export class ManagePlayersComponent implements OnInit {
    * @param $event évènement de changement de quizz sélectionné
    */
   onChange($event) {
-    for (let info of this.infosQuizz) {
-      if (info.nom == this.quizz) {
-        this.infoQuizz = info;
-      }
-    }
+    this.loadPlayers().subscribe();
   }
 
   /**
    * Fonction appelée au clic sur le bouton "Désigner un vainqueur"
    */
   designerVainqueur() {
-    let vainqueursPlausibles = [];
-    let vainqueursPlausiblesReduit = [];
-    let vainqueur = null;
-    for (let player of this.infoQuizz.players) {
-      if (player.quizzSolved) {
+    let vainqueursPlausibles: Player[] = [];
+    let vainqueursPlausiblesReduit: Player[] = [];
+    let vainqueur: Player = null;
+
+    for (let player of this.listPlayers) {
+      if (player.userResponse.statut == 'FINI') {
         vainqueursPlausibles.push(player);
       }
     }
@@ -124,14 +92,14 @@ export class ManagePlayersComponent implements OnInit {
       vainqueur = vainqueursPlausibles[0];
     } else {
 
-      // On retire les joueurs qui n'ont pas résolu 80% des enigmes
+      // On retire les joueurs qui n'ont pas résolu 50% des enigmes
       for (let player of vainqueursPlausibles) {
-        if (player.nbIndices > (this.infoQuizz.nbQuestions * 80 / 100)) {
+        if (player.userResponse.indicesTrouves.length > (player.userResponse.reponsesQuestions.length * 50 / 100)) {
           vainqueursPlausiblesReduit.push(player);
         }
       }
 
-      // Si aucun joueur n'a résolu 80% des énigmes, on garde tous les joueurs ayant trouvé le quizz
+      // Si aucun joueur n'a résolu 50% des énigmes, on garde tous les joueurs ayant trouvé le quizz
       if (vainqueursPlausiblesReduit.length == 0) {
         vainqueursPlausiblesReduit = Object.assign([], vainqueursPlausibles);
       }
@@ -146,10 +114,10 @@ export class ManagePlayersComponent implements OnInit {
 
       // Désignation du vainqueur
       if (vainqueur) {
-        this.infoQuizz.mailVainqueur = vainqueur.mail;
+        this.infoQuizz.mailVainqueur = vainqueur.user.email;
         this.alertCtrl.create({
           header: 'And the winner is...',
-          message: vainqueur.firstName + ' ' + vainqueur.lastName + ', ' + vainqueur.tel + ', ' + vainqueur.mail,
+          message: vainqueur.user.firstName + ' ' + vainqueur.user.lastName + ', ' + vainqueur.user.phone + ', ' + vainqueur.user.email,
           buttons: ['OK']
         }).then(alert => {
           alert.present();
@@ -163,7 +131,7 @@ export class ManagePlayersComponent implements OnInit {
           alert.present();
         });
       }
-      
+
     }
   }
 }
