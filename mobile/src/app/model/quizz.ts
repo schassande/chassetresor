@@ -8,8 +8,10 @@ export type QuizzStatut = 'OUVERT' | 'FERME';
 export interface Quizz extends PersistentData {
     /** Libelle/nom du quizz */
     libelle: string;
-    /** Statut du quizz : INIT, OUVERT ou FERME */
+    /** Statut du quizz : OUVERT ou FERME */
     statut: QuizzStatut;
+    /** Reponse attendue */
+    reponse: string;
     /** Questions du quizz */
     questions: {
         /** Identifiant de la question */

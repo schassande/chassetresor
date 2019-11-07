@@ -13,7 +13,11 @@
     <ion-grid style="height: 100%">
       <ion-row justify-content-center align-items-center style="height: 100%">
 
+            <ion-item *ngIf="!quizzId">
+                Le quiz est indisponible
+            </ion-item>
             <ion-item-group 
+                *ngIf="quizzId"
                 id="zone-saisie"
                 style="width: 100%;">
                 <ion-list class="formulaire">
@@ -51,6 +55,7 @@
     </ion-fab>
 
     <ion-button 
+        *ngIf="quizzId"
         class="bouton" 
         shape="round" 
         size="large"
