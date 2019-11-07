@@ -37,6 +37,7 @@ import { QuizzService } from './service/QuizzService';
 import { ValidationService } from './service/ValidationService';
 import { MessageService } from './service/MessageService';
 import { NgQrScannerModule } from 'angular2-qrscanner';
+import { ManagePlayersService } from './page/admin/manage-players/manage-players.service';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { NgQrScannerModule } from 'angular2-qrscanner';
     QuizzService,
     ValidationService,
     MessageService,
+    ManagePlayersService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -17,7 +17,8 @@ export class ManageQuizzComponent implements OnInit {
   listQuizz: Quizz[];
 
   /** Constructeur */
-  constructor(private quizzService: QuizzService,
+  constructor(
+    private quizzService: QuizzService,
     private alertCtrl: AlertController) { }
 
   /** Méthode exécutée à l'initialisation de l'écran */
