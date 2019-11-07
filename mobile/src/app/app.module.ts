@@ -35,6 +35,7 @@ import { IndicesPipe } from './utlis/indices.pipe';
 import { UserResponseService } from './service/UserResponseService';
 import { QuizzService } from './service/QuizzService';
 import { ValidationService } from './service/ValidationService';
+import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { ValidationService } from './service/ValidationService';
     UserResponseService,
     QuizzService,
     ValidationService,
+    QRScanner,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

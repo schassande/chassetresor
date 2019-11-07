@@ -3,10 +3,10 @@
     <!-- Permet de centrer la page. Voir si moyen plus propre car galère en css -->
     <ion-grid style="height: 100%">
         <ion-row justify-content-center align-items-center style="height: 100%">
-                
+
             <ion-item-group id="zone-presentation">
                 <p class="texte-presentation">Bienvenue sur la chasse au trésor</p>
-                <img id="logo" src="assets/imgs/soprasteria_logo1.jpg"/>
+                <img id="logo" src="assets/imgs/soprasteria_logo1.jpg" />
             </ion-item-group>
 
             <ion-item-group id="zone-saisie">
@@ -14,14 +14,12 @@
                     <ion-item>
                         <ion-label position="floating">
                             <p class="controle_label">Email</p>
-                            <p class="error_label" *ngIf="err_saisie_email">{{err_saisie_email}}</p>
                         </ion-label>
                         <ion-input type="email" pattern="email" [(ngModel)]="email" tabindex="1"></ion-input>
                     </ion-item>
                     <ion-item>
                         <ion-label position="floating">
                             <p class="controle_label">Mot de passe</p>
-                            <p class="error_label" *ngIf="err_saisie_mdp">{{err_saisie_mdp}}</p>
                         </ion-label>
                         <ion-input type="password" [(ngModel)]="password" tabindex="2"></ion-input>
                     </ion-item>
@@ -42,7 +40,7 @@
                     <ion-text class="texte-bouton">Se connecter</ion-text>
                 </ion-button>
             </ion-item-group>
-    
+
         </ion-row>
     </ion-grid>
 </ion-content>
