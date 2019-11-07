@@ -1,15 +1,8 @@
 <ion-header>
     <ion-toolbar>
         <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
-        <ion-title 
-            *ngIf="pageStatus == 'QUESTION_DISPONIBLE'"
-            style="text-align: center;">
-            Question n°{{question.questionId}}
-        </ion-title>
-        <ion-title 
-            *ngIf="pageStatus == 'QUESTION_INDISPONIBLE'"
-            style="text-align: center;">
-            Question
+        <ion-title style="text-align: center;">
+            Question <span *ngIf="pageStatus === 'QUESTION_A_TRAITER'">n°{{question.questionId}}</span>
         </ion-title>
         <ion-buttons slot="end">
             <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
@@ -18,71 +11,50 @@
 </ion-header>
 
 <ion-content>
-  <!-- Permet de centrer la page. Voir si moyen plus propre car galère en css -->
-  <ion-grid style="height: 100%">
-    <ion-row justify-content-center align-items-center style="height: 100%">
+    <!-- Permet de centrer la page. Voir si moyen plus propre car galère en css -->
+    <ion-grid style="height: 100%">
+        <ion-row justify-content-center align-items-center style="height: 100%">
 
-        <ion-item *ngIf="pageStatus == 'QUESTION_INDISPONIBLE'">
-            La question est indisponible pour le moment.
-        </ion-item>
+            <ion-item *ngIf="pageStatus === 'QUESTION_INDISPONIBLE'">
+                La question est indisponible pour le moment.
+            </ion-item>
 
-        <ion-item-group 
-            *ngIf="pageStatus == 'QUESTION_A_TRAITER'"
-            id="zone-saisie"
-            style="width: 100%;">
-            <ion-list class="formulaire">
-                <ion-item>
-                    <p 
-                    style='margin-top: 0;
+            <ion-item-group *ngIf="pageStatus === 'QUESTION_A_TRAITER'" id="zone-saisie" style="width: 100%;">
+                <ion-list class="formulaire">
+                    <ion-item>
+                        <p style='margin-top: 0;
                     padding: 0; 
                     max-height: 200px;
                     overflow: scroll;
                     text-align: justify'>
-                        {{question.libelle}}
-                    </p>
-                </ion-item>
-                <ion-item>
-                    <ion-label position="floating">
-                        <p
-                        style="display:inline-block;
+                            {{question.libelle}}
+                        </p>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label position="floating">
+                            <p style="display:inline-block;
                         color: black;">Réponse</p>
-                    </ion-label>
-                    <ion-input 
-                        type="text" 
-                        [(ngModel)]="reponse"
-                        tabindex="1" 
-                        style="text-align: center;"
-                        maxlength="{{question.tailleReponse}}" 
-                        placeholder="{{''|indices:question.tailleReponse}}"
-                        ></ion-input>
-                </ion-item>
-            </ion-list>
+                        </ion-label>
+                        <ion-input type="text" [(ngModel)]="reponse" tabindex="1" style="text-align: center;" maxlength="{{question.tailleReponse}}" placeholder="{{''|indices:question.tailleReponse}}"></ion-input>
+                    </ion-item>
+                </ion-list>
             </ion-item-group>
-   
-      </ion-row>
+
+        </ion-row>
     </ion-grid>
 
     <ion-fab horizontal="start" vertical="bottom" slot="fixed">
         <ion-fab-button color="danger" routerLink="/home">
-          <ion-icon name="home"></ion-icon>
+            <ion-icon name="home"></ion-icon>
         </ion-fab-button>
     </ion-fab>
 
-    <ion-button 
-        *ngIf="pageStatus == 'QUESTION_A_TRAITER'"
-        class="bouton" 
-        shape="round" 
-        size="large"
-        color="success"
-        style="position: fixed;
+    <ion-button *ngIf="pageStatus == 'QUESTION_A_TRAITER'" class="bouton" shape="round" size="large" color="success" style="position: fixed;
         bottom: 5px;
         right: 10px;
         width: 225px;
-        height: 56px;"
-        (click) ="validerSaisie()">
-        <ion-text 
-            class="texte-bouton"
-            style="font-size: 16px;">Valider la réponse</ion-text>
+        height: 56px;" (click)="validerSaisie()">
+        <ion-text class="texte-bouton" style="font-size: 16px;">Valider la réponse</ion-text>
     </ion-button>
 
 </ion-content>
