@@ -8,8 +8,12 @@
         </ion-toolbar>
     </ion-header>
 
-    <!-- Etat de l'écran avec des questions en attente -->
-    <ion-label *ngIf="hasQuestions()" style="padding: 15px; background-color: white;"> Répondez aux questions suivantes : </ion-label>
+    <!-- Etat de l'écran avec des questions à traiter -->
+    <ion-label 
+        *ngIf="pageStatus == 'QUESTIONS_A_TRAITER'" 
+        style="padding: 15px; background-color: white;"> 
+        Répondez aux questions suivantes : 
+    </ion-label>
 
     <ion-content>
 
@@ -18,18 +22,22 @@
             <ion-row justify-content-center align-items-center style="height: 100%">
  
                 <!-- Etat : Aucun quizz de disponnible -->
-                <label *ngIf="!quizzId">
+                <label *ngIf="pageStatus == 'AUCUN_QUIZZ'">
                     Le quizz n'est pas disponnible pour le moment
                 </label>
 
-                <!-- Etat initial de l'écran-->
+                <!-- Etat : Quiz achevé -->
+                <label *ngIf="pageStatus == 'QUIZZ_TERMINE'">
+                    Bravo ! Vous avez résolu l'énigme !
+                </label>
+
+                <!-- Etat par defaut de l'écran : Possibilité de scanner les questions-->
                 <ion-button 
                     class="bouton" 
                     shape="round" 
                     size="large"
                     routerLink="/scan"
-                    *ngIf="!hasAllIndices() &&  !hasQuestions()"
-                    >
+                    *ngIf="pageStatus == 'QUESTIONS_A_SCANNER'">
                     <ion-icon 
                         class="icone" 
                         name="camera" 
@@ -39,8 +47,8 @@
                         class="texte-bouton">Scannez un code</ion-text>
                 </ion-button>
 
-                <!-- Etat de l'écran avec des questions en attente -->
-                <ion-list style="width: 100%"  *ngIf="hasQuestions()">
+                <!-- Etat de l'écran avec des questions à traiter -->
+                <ion-list style="width: 100%"  *ngIf="pageStatus == 'QUESTIONS_A_TRAITER'">
                     <ion-item *ngFor="let question of questions" (click) ="redirectQuestionPage(question)">
                         <ion-label>{{question.id}}.  {{question.libelle}}</ion-label>
                         <ion-icon class="icone" name="arrow-forward"></ion-icon>
@@ -54,7 +62,7 @@
                     size="large"
                     routerLink="/quizz"
                     color="success"
-                    *ngIf="hasAllIndices() &&  !hasQuestions() && quizzId">
+                    *ngIf="pageStatus == 'INDICES_TROUVES'">
                     <ion-icon 
                         class="icone" 
                         name="trophy" 
@@ -71,7 +79,7 @@
 
 <!-- On affiche la liste des indices et la possibilité de répondre -->
 <ion-button 
-    *ngIf="!hasAllIndices()"
+    *ngIf="!(pageStatus == 'QUIZZ_TERMINE') && (pageStatus == 'QUESTIONS_A_TRAITER' || pageStatus == 'QUESTIONS_A_SCANNER')"
     class="bouton" 
     expand="full" 
     routerLink="/quizz" 

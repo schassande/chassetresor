@@ -5,6 +5,8 @@ import { UserResponseService } from 'src/app/service/UserResponseService';
 import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
 import { QuizzService } from 'src/app/service/QuizzService';
 
+export type PageStatus =  'CHARGEMENT' | 'AUCUN_QUIZZ' | 'QUESTIONS_A_SCANNER'| 'QUESTIONS_A_TRAITER' | 'INDICES_TROUVES' | 'QUIZZ_TERMINE';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -12,14 +14,19 @@ import { QuizzService } from 'src/app/service/QuizzService';
 })
 export class HomePage implements OnInit{
 
+  /** Statut de la page */
+  pageStatus: PageStatus;
+
   /** Identifiant du quizz Actif */
   quizzId: string;
-  /** Nombre d'indices à trouver */
+  /** Nombre d'indices total à trouver */
   nbIndices: number = 0;
-  /** Indices trouvés */
+  /** Indices trouvés par l'utilisateur */
   indicesTrouves: string = '';
   /** Questions en attente de réponse */
   questions: UserQuestion[] = [];
+  /** Quizz validé ? */
+  isQuizzValide: boolean = false;
 
   constructor(
     private navController: NavController,
@@ -29,27 +36,48 @@ export class HomePage implements OnInit{
     private changeRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    /** Chargement des valeurs de l'écran */
+    this.pageStatus = 'CHARGEMENT';
     this.loadValues();
   }
 
+  /** Chargement des valeurs de l'écran */
   loadValues() {
     var vm = this;
+
     /** Etape 1 : Récupération de l'identifiant du Quizz courant */
     this.quizzService.getActiveQuizzId().toPromise().then(function(rQuizzId){
-      vm.quizzId = rQuizzId;
-      /** Etape 2 : Récupération de UserResponse */
-      return vm.userResponseService.loadUserResponse(vm.connectedUserService.getCurrentUser().id, vm.quizzId)
+      if(!rQuizzId){
+        return;
+      } else{
+        vm.quizzId = rQuizzId;
+        /** Etape 2 : Récupération de UserResponse */
+        return vm.userResponseService.loadUserResponse(vm.connectedUserService.getCurrentUser().id, vm.quizzId);
+      }
     }).then(function(rUserResponse){
       /** Etape 3 : Initialisation des valeurs de l'écran avec UserResponse */
       if(rUserResponse){
         vm.nbIndices = rUserResponse.reponsesQuestions.length; // Il y a autant de questions que d'indices
         vm.indicesTrouves = rUserResponse.indicesTrouves;
         vm.questions = rUserResponse.reponsesQuestions.filter(userQuestion => userQuestion.statut == 'SCANNE');
+        vm.isQuizzValide = rUserResponse.statut == 'FINI';
       }
-      /** Etape 4 : Syncronization des changements */
+    }).finally(function(){
+      /** Calcul du statut de l'ecran */
+      if(!vm.quizzId){
+        vm.pageStatus = 'AUCUN_QUIZZ';
+      } else if (vm.isQuizzValide){
+        vm.pageStatus = 'QUIZZ_TERMINE';
+      } else if(this.hasAllIndices()) {
+        vm.pageStatus = 'INDICES_TROUVES';
+      } else if(this.hasQuestions()){
+        vm.pageStatus = 'QUESTIONS_A_TRAITER';
+      } else {
+        vm.pageStatus = 'QUESTIONS_A_SCANNER';
+      }
+
+      /** Syncronization des changements */
       vm.changeRef.detectChanges();
-    })
+    });
   }
 
   /** Methode redirigeant l'utilisateur vers la page de la question demandee */
@@ -65,5 +93,5 @@ export class HomePage implements OnInit{
   hasQuestions(): boolean{
     return this.questions.length>0;
   }
-
+  
 }
