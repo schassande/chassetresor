@@ -35,6 +35,8 @@ import { IndicesPipe } from './utlis/indices.pipe';
 import { UserResponseService } from './service/UserResponseService';
 import { QuizzService } from './service/QuizzService';
 import { ValidationService } from './service/ValidationService';
+import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+import { MessageService } from './service/MessageService';
 import { ManagePlayersService } from './page/admin/manage-players/manage-players.service';
 
 @NgModule({
@@ -74,6 +76,8 @@ import { ManagePlayersService } from './page/admin/manage-players/manage-players
     UserResponseService,
     QuizzService,
     ValidationService,
+    QRScanner,
+    MessageService,
     ManagePlayersService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

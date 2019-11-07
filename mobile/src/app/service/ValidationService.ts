@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AppSettingsService } from './AppSettingsService';
 import { UserResponseService } from './UserResponseService';
 import { QuizzService } from './QuizzService';
+import { MessageService } from './MessageService';
 
 @Injectable()
 export class ValidationService {
@@ -12,7 +13,8 @@ export class ValidationService {
         public appSettingsService: AppSettingsService,
         public alertController: AlertController,
         public userResponseService: UserResponseService,
-        public quizzService: QuizzService
+        public quizzService: QuizzService,
+        public messageService: MessageService
     ) {}
 
     getLocalStoragePrefix(): string {
@@ -25,52 +27,52 @@ export class ValidationService {
 
     /**
      * Methode de validation de la question
-     * @param reponseUtilisateur 
-     * @param questionId 
+     * @param reponseUtilisateur la reponse de l'utilisateur
+     * @param questionId l'identifiant de la question
      */
-    validerQuestion(reponseUtilisateur:string, questionId: string, userId: string): Promise<string>{
-        var vm = this;
-        var activeQuizzId: string;
-        
+    validerQuestion(reponseUtilisateur: string, questionId: string, userId: string): Promise<string> {
+        let activeQuizzId: string;
+
         return this.quizzService.getActiveQuizz().toPromise()
         /** Verification que la question se trouve dans le quizz au statut Ouvert */
-        .then(function(rActiveQuizz){
+        .then(function(rActiveQuizz) {
             /** Pas de quizz actif */
-            if(!rActiveQuizz){
-                vm.showMessage('Le quiz n\'est plus ouvert','validationPopupRed');
-                vm.navController.navigateRoot(['/home']);
+            if (!rActiveQuizz) {
+                this.messageService.showMessage('Le quiz n\'est plus ouvert', 'validationPopupRed');
+                this.navController.navigateRoot(['/home']);
                 return;
-            } else{
+            } else {
                 activeQuizzId = rActiveQuizz.id;
                 /** Recherche de la question */
-                var question = rActiveQuizz.questions.find(function(element) { return element.questionId == questionId; });
+                const question = rActiveQuizz.questions.find((element)  => element.questionId === questionId );
                 /** Question non trouvée */
-                if(!question){
-                    vm.showMessage('La question n\'a pas été trouvée en base','validationPopupRed');
-                    vm.navController.navigateRoot(['/home']);
+                if (!question) {
+                    this.messageService.showMessage('La question n\'a pas été trouvée en base', 'validationPopupRed');
+                    this.navController.navigateRoot(['/home']);
                     return;
-                } else{
+                } else {
                     return question;
                 }
             }
         })
         /** Verification de la validité de la question */
-        .then(function(rQuestion){
-            if(!rQuestion){
+        .then((rQuestion) => {
+            if (!rQuestion) {
                 return;
-            } else if(reponseUtilisateur.toUpperCase() != rQuestion.reponse.toUpperCase()){
-                vm.showMessage('Réponse incorrecte','validationPopupRed');
+            } else if (reponseUtilisateur.toUpperCase() !== rQuestion.reponse.toUpperCase()) {
+                this.messageService.showMessage('Réponse incorrecte', 'validationPopupRed');
                 return;
-            } else{
+            } else {
                 /** Récupération du user response */
-                return vm.userResponseService.getUserResponse(userId,activeQuizzId).toPromise().then(function(rUserResponse){
-                    if(!rUserResponse){
-                        vm.showMessage('Un problème est survenu lors de la récupération des informations utilisateur','validationPopupRed');
+                return this.userResponseService.getUserResponse(userId, activeQuizzId).toPromise().then((rUserResponse) => {
+                    if (!rUserResponse) {
+                        this.messageService.showMessage('Un problème est survenu lors de la récupération des informations utilisateur',
+                            'validationPopupRed');
                         return;
-                    } else{
+                    } else {
                         rUserResponse.indicesTrouves = rUserResponse.indicesTrouves.concat(rQuestion.indice);
                         rUserResponse.reponsesQuestions.forEach(element => {
-                            if(element.questionId == questionId) { 
+                            if (element.questionId === questionId) {
                                 element.statut = 'VALIDE';
                                 element.reponse = reponseUtilisateur;
                             }
@@ -79,88 +81,75 @@ export class ValidationService {
                     }
                 })
                 /** Update de l'user response */
-                .then(function(rUserResponse){
-                    if(!rUserResponse){
+                .then((rUserResponse) => {
+                    if (!rUserResponse) {
                         return;
                     } else {
-                        return vm.userResponseService.save(rUserResponse).toPromise();
+                        return this.userResponseService.save(rUserResponse).toPromise();
                     }
-                }).then(function(rUserResponse){
-                    if(!rUserResponse){
+                }).then((rUserResponse) => {
+                    if (!rUserResponse) {
                         return;
-                    } else if(!rUserResponse.data){
-                        vm.showMessage('Un problème est survenu lors de la mise à jour des informations utilisateur','validationPopupRed');
+                    } else if (!rUserResponse.data) {
+                        this.messageService.showMessage('Un problème est survenu lors de la mise à jour des informations utilisateur',
+                            'validationPopupRed');
                     } else {
-                        vm.showMessage('Indice ' + rQuestion.indice + ' ajouté !', 'validationPopupGreen');
-                        vm.navController.navigateRoot(['/home']);
+                        this.messageService.showMessage('Indice ' + rQuestion.indice + ' ajouté !', 'validationPopupGreen');
+                        this.navController.navigateRoot(['/home']);
                         return rQuestion.indice;
                     }
 
-                })
+                });
             }
-        })
+        });
       }
 
       /**
        * Methode de validation du quizz
-       * @param reponseUtilisateur 
-       * @param quizzId 
        */
-      validerQuizz(reponseUtilisateur:string, quizzId: string, userId: string): Promise<boolean> {
-        var vm = this;
+      validerQuizz(reponseUtilisateur: string, quizzId: string, userId: string): Promise<boolean> {
         /** Recuperation du quizz */
-        return this.quizzService.get(quizzId).toPromise().then(function(rQuizz){
+        return this.quizzService.get(quizzId).toPromise().then((rQuizz) => {
             /** Le quizz n'a pas été récupéré */
-            if(!rQuizz.data){
-                vm.showMessage('Erreur lors de la récupération du quiz','validationPopupRed');
+            if (!rQuizz.data) {
+                this.messageService.showMessage('Erreur lors de la récupération du quiz', 'validationPopupRed');
                 return false;
-            } else if (rQuizz.data.statut != 'OUVERT') {
-                vm.showMessage('Le quiz n\'est plus ouvert','validationPopupRed');
+            } else if (rQuizz.data.statut !== 'OUVERT') {
+                this.messageService.showMessage('Le quiz n\'est plus ouvert', 'validationPopupRed');
                 return false;
-            } else if (rQuizz.data.reponse.toUpperCase() != reponseUtilisateur.toUpperCase()){
-                vm.showMessage('Réponse incorrecte','validationPopupRed');
+            } else if (rQuizz.data.reponse.toUpperCase() !== reponseUtilisateur.toUpperCase()) {
+                this.messageService.showMessage('Réponse incorrecte', 'validationPopupRed');
                 return false;
             } else {
                 return true;
             }
-        }).then(function(isValid){
-            if(!isValid){
+        }).then(function(isValid) {
+            if (!isValid) {
                 return false;
-            } else{
+            } else {
                 /** On met à jour le userResponse */
-                return vm.userResponseService.getUserResponse(userId, quizzId).toPromise().then(function(rUserResponse){
-                    if(!rUserResponse){
-                        vm.showMessage('Un problème est survenu lors de la récupération des informations utilisateur','validationPopupRed');
+                return this.userResponseService.getUserResponse(userId, quizzId).toPromise().then((rUserResponse) => {
+                    if (!rUserResponse) {
+                        this.messageService.showMessage('Un problème est survenu lors de la récupération des informations utilisateur',
+                            'validationPopupRed');
                         return false;
                     } else {
                         rUserResponse.statut = 'FINI';
                         rUserResponse.reponseQuizz = reponseUtilisateur;
-                        return vm.userResponseService.save(rUserResponse).toPromise().then(function(rUserResponse){
-                            if(!rUserResponse.data){
-                                vm.showMessage('Un problème est survenu lors de la mise à jour des informations utilisateur','validationPopupRed');
-                            } else{
-                                vm.showMessage('Vous avez résolu l\'énigme','validationPopupGreen');
-                                vm.navController.navigateRoot(['/home']);
+                        return this.userResponseService.save(rUserResponse).toPromise().then((rUserResponse2) => {
+                            if (!rUserResponse2.data) {
+                                this.messageService.showMessage(
+                                    'Un problème est survenu lors de la mise à jour des informations utilisateur',
+                                    'validationPopupRed');
+                            } else {
+                                this.messageService.showMessage('Vous avez résolu l\'énigme', 'validationPopupGreen');
+                                this.navController.navigateRoot(['/home']);
                                 return true;
                             }
-                        })
+                        });
                     }
-                })
+                });
             }
-        })
-      }
-    
-    /**
-     * Affichage d'un message sous forme de popup
-     * @param pMessage 
-     * @param pCssClass 
-     */
-    async showMessage(pMessage: string, pCssClass: string) {
-        const alert = await this.alertController.create({
-          message: pMessage,
-          cssClass: pCssClass
         });
-        await alert.present();
-    }
-
+      }
 }

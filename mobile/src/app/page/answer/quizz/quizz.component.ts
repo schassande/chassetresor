@@ -5,6 +5,8 @@ import { QuizzService } from 'src/app/service/QuizzService';
 import { UserResponseService } from 'src/app/service/UserResponseService';
 import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
 
+export type PageStatus =  'CHARGEMENT' | 'QUIZZ_INDISPONIBLE' | 'QUIZZ_DISPONBILE' | 'QUIZZ_TERMINE';
+
 @Component({
   selector: 'app-quizz',
   templateUrl: './quizz.component.html',
@@ -12,14 +14,19 @@ import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
 })
 export class QuizzComponent implements OnInit {
 
+    /** Statut de la page utilisé pour les differentes configurations de l'écran */
+    pageStatus: PageStatus;
+
     /** Identifiant du quizz Actif */
     quizzId: string;
     /** Nombre d'indices à trouver */
-    nbIndices: number = 0;
+    nbIndices = 0;
     /** Indices trouvés */
     indicesTrouves: Array<string> = [];
-    /** reponse */
-    reponse: string = '';
+    /** Reponse de l'utilisateur */
+    reponse = '';
+    /** Quizz validé ? */
+    isQuizzValide = false;
 
   constructor(
     private validationService: ValidationService,
@@ -30,38 +37,53 @@ export class QuizzComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.pageStatus = 'CHARGEMENT';
     this.loadValues();
   }
 
   loadValues() {
-    var vm = this;
     /** Etape 1 : Récupération de l'identifiant du Quizz courant */
-    this.quizzService.getActiveQuizzId().toPromise().then(function(rQuizzId){
-      vm.quizzId = rQuizzId;
+    this.quizzService.getActiveQuizzId().toPromise().then((rQuizzId) => {
+      this.quizzId = rQuizzId;
       /** Etape 2 : Récupération de UserResponse */
-      return vm.userResponseService.getUserResponse(vm.connectedUserService.getCurrentUser().id, vm.quizzId).toPromise()
-    }).then(function(rUserResponse){
+      return this.userResponseService.getUserResponse(this.connectedUserService.getCurrentUser().id, this.quizzId).toPromise();
+    }).then((rUserResponse) => {
       /** Etape 3 : Initialisation des valeurs de l'écran avec UserResponse */
-      if(rUserResponse){
-        vm.nbIndices = rUserResponse.reponsesQuestions.length;
-        vm.initializeIndicesTab(rUserResponse.indicesTrouves);
+      if (rUserResponse) {
+        this.nbIndices = rUserResponse.reponsesQuestions.length;
+        this.initializeIndicesTab(rUserResponse.indicesTrouves);
+        this.isQuizzValide = rUserResponse.statut === 'FINI';
       }
-      vm.changeRef.detectChanges();
-    })
+      this.changeRef.detectChanges();
+    }).finally(() => {
+      /** Calcul du statut de l'ecran */
+      if (!this.quizzId) {
+        this.pageStatus = 'QUIZZ_INDISPONIBLE';
+      } else if (this.isQuizzValide) {
+        this.pageStatus = 'QUIZZ_TERMINE';
+      } else {
+        this.pageStatus = 'QUIZZ_DISPONBILE';
+      }
+
+      /** Syncronization des changements */
+      this.changeRef.detectChanges();
+    });
   }
 
-  initializeIndicesTab(indices: string){
+  initializeIndicesTab(indices: string) {
     indices = new IndicesPipe().transform(indices, this.nbIndices).toString();
+    this.indicesTrouves = indices.replace(' ', '').split('');
+    /*
     this.indicesTrouves = new Array<string>();
-     for (var i = 0; i < indices.length; i++) {
-       if(indices[i]!=' '){
+    for (let i = 0; i < indices.length; i++) {
+       if (indices[i] !== ' ') {
         this.indicesTrouves.push(indices[i]);
        }
     }
+    */
   }
 
-  validerSaisie(){
-    this.validationService.validerQuizz(this.reponse,this.quizzId,this.connectedUserService.getCurrentUser().id);
+  validerSaisie() {
+    this.validationService.validerQuizz(this.reponse, this.quizzId, this.connectedUserService.getCurrentUser().id);
   }
-
 }

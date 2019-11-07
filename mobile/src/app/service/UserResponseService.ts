@@ -1,12 +1,13 @@
-import { ToastController } from '@ionic/angular';
+import { ToastController, NavController } from '@ionic/angular';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import { Injectable } from '@angular/core';
 import { RemotePersistentDataService } from './RemotePersistentDataService';
-import { UserResponse } from '../model/quizz';
+import { UserResponse, UserQuestion } from '../model/quizz';
 import { QuizzService } from './QuizzService';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MessageService } from './MessageService';
 
 @Injectable()
 export class UserResponseService  extends RemotePersistentDataService<UserResponse> {
@@ -14,7 +15,9 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
     constructor(
         private quizzService: QuizzService,
         db: AngularFirestore,
-        toastController: ToastController
+        toastController: ToastController,
+        private messageService: MessageService,
+        private navController: NavController
     ) {
         super(db, toastController);
     }
@@ -25,6 +28,52 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
 
     getPriority(): number {
         return 1;
+    }
+
+
+    /**
+     * Methode retournant une UserQuestion a partir d'un userId et d'un quizzId
+     * La question est recherchée dans le quiz actif
+     * @param userId 
+     * @param questionId 
+     */
+    getUserQuestion(userId: string, questionId: string): Promise<UserQuestion> {
+        var vm = this;
+
+        return this.quizzService.getActiveQuizzId().toPromise().then(function(rQuizzId){
+            if(!rQuizzId){
+                vm.messageService.showMessage('Le quiz n\'est plus ouvert','validationPopupRed');
+                return;
+            } else{
+                return vm.getUserResponse(userId,rQuizzId).toPromise().then(function(rUserResponse){
+                    if(!rUserResponse){
+                        vm.messageService.showMessage('Un problème est survenu lors de la récupération des informations utilisateur','validationPopupRed');
+                        return;
+                    } else{
+                        return rUserResponse;
+                    }
+                })
+            }
+        }).then(function(rUserResponse){
+            if(!rUserResponse){
+                return;
+            } else{
+                 /** Recherche de la question */
+                 var question = rUserResponse.reponsesQuestions.find(function(element) { return element.questionId == questionId; });
+                 /** Question non trouvée */
+                 if(!question){
+                    vm.messageService.showMessage('La question n\'a pas été trouvée en base','validationPopupRed');
+                    vm.navController.navigateRoot(['/home']);
+                    return;
+                 } else if(question.statut == 'VALIDE') {
+                    vm.messageService.showMessage('Vous avez déja répondu à cette question','validationPopupGreen');
+                    vm.navController.navigateRoot(['/home']);
+                    return;
+                 } else {
+                    return question;
+                 }
+            }
+        })
     }
 
     /**

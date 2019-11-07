@@ -1,3 +1,4 @@
+import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
@@ -14,7 +15,8 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private userService: UserService
+    private userService: UserService,
+    public connectedUserService: ConnectedUserService
   ) {
     this.initializeApp();
   }
