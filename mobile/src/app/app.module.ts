@@ -36,6 +36,7 @@ import { UserResponseService } from './service/UserResponseService';
 import { QuizzService } from './service/QuizzService';
 import { ValidationService } from './service/ValidationService';
 import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+import { MessageService } from './service/MessageService';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { QRScanner } from '@ionic-native/qr-scanner/ngx';
     QuizzService,
     ValidationService,
     QRScanner,
+    MessageService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

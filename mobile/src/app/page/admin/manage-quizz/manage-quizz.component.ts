@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Quizz } from 'src/app/model/quizz';
 import { QuizzService } from 'src/app/service/QuizzService';
 import { AlertController } from '@ionic/angular';
+import { map, flatMap } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
+import { ResponseWithData } from 'src/app/service/response';
 
 @Component({
   selector: 'app-manage-quizz',
@@ -19,14 +22,19 @@ export class ManageQuizzComponent implements OnInit {
 
   /** Méthode exécutée à l'initialisation de l'écran */
   ngOnInit() {
-    this.loadQuizz();
+    this.loadQuizz().subscribe();
   }
 
   /**
    * Fonction permettant le chargement tous les quizz présents en base
    */
-  loadQuizz() {
-    this.quizzService.all().subscribe(rQuizz => this.listQuizz = rQuizz.data);
+  loadQuizz(): Observable<ResponseWithData<Quizz[]>> {
+    return this.quizzService.all().pipe(
+      map(rQuizz => {
+        this.listQuizz = rQuizz.data;
+        return rQuizz;
+      })
+    );
   }
 
   /**
@@ -36,31 +44,39 @@ export class ManageQuizzComponent implements OnInit {
    * @param quizzId l'ID du quizz
    */
   startQuizz(quizzId) {
-    
-    let openQuizz: Quizz;
-    this.quizzService.getActiveQuizz().subscribe(rQuizz => openQuizz = rQuizz);
-
-    // Vérification qu'il n'y a pas déjà un quizz OUVERT
-    if (openQuizz) {
-      // Si il y a déjà un quizz ouvert => message d'erreur + do nothing
-      this.alertCtrl.create({
-        header: 'Erreur',
-        message: 'Il y a déjà un quizz ouvert actuellement : ' + openQuizz.libelle,
-        buttons: ['OK']
-      }).then(alert => {
-        alert.present();
-      });
-    } else {
-      // Sinon ; ouverture du quizz + update en base (TODO)
-      for (let quizz of this.listQuizz) {
-        if (quizz.id == quizzId) {
-          if (quizz.statut == 'FERME') {
-            quizz.statut = 'OUVERT';
+    this.quizzService.getActiveQuizz().pipe(
+      flatMap(openQuizz => {
+        // Vérification qu'il n'y a pas déjà un quizz OUVERT
+        if (openQuizz) {
+          // Si il y a déjà un quizz ouvert => message d'erreur + do nothing
+          this.alertCtrl.create({
+            header: 'Erreur',
+            message: 'Il y a déjà un quizz ouvert actuellement : ' + openQuizz.libelle,
+            buttons: ['OK']
+          }).then(alert => {
+            alert.present();
+          });
+        } else {
+          // Sinon ; ouverture du quizz + update en base
+          const quizz = this.listQuizz.find(quizz => quizz.id === quizzId);
+          if (quizz) {
+            if (quizz.statut == 'FERME') {
+              quizz.statut = 'OUVERT';
+            }
+            return this.quizzService.save(quizz);
           }
-          this.quizzService.save(quizz).subscribe();
         }
-      }
-    }
+        return of('');
+      }),
+      flatMap(quizz => {
+        if (quizz) {
+          // Le quizz a ete modifie ==> rech
+          return this.loadQuizz();
+        } else {
+          return of('');
+        }
+      })
+    ).subscribe();
   }
 
   /**
@@ -70,13 +86,13 @@ export class ManageQuizzComponent implements OnInit {
    * @param quizzId l'ID du quizz
    */
   stopQuizz(quizzId) {
-    for (let quizz of this.listQuizz) {
-      if (quizz.id == quizzId) {
-        if (quizz.statut == 'OUVERT') {
-          quizz.statut = 'FERME';
-        }
+    const quizz = this.listQuizz.find(quizz => quizz.id === quizzId);
+    if (quizz) {
+      if (quizz.statut == 'OUVERT') {
+        quizz.statut = 'FERME';
       }
     }
+    this.quizzService.save(quizz).subscribe();
   }
 
 }

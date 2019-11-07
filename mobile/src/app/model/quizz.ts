@@ -8,8 +8,10 @@ export type QuizzStatut = 'OUVERT' | 'FERME';
 export interface Quizz extends PersistentData {
     /** Libelle/nom du quizz */
     libelle: string;
-    /** Statut du quizz : INIT, OUVERT ou FERME */
+    /** Statut du quizz : OUVERT ou FERME */
     statut: QuizzStatut;
+    /** Reponse attendue */
+    reponse: string;
     /** Questions du quizz */
     questions: {
         /** Identifiant de la question */
@@ -64,47 +66,3 @@ export interface UserQuestion {
     /** Statut de la question vis à vis de l'utilisateur */
     statut: QuestionReponseStatut;
 }
-
-/** Première version */
-/*import { PersistentData } from '../common';
-import { Question } from './question';
-import { User } from 'firebase';
-import { type } from 'os';
-
-export interface Quizz extends PersistentData {
-
-    libelle: string;
-    questions: Question[];
-    gagnant: {
-        email: string;
-        userId: string;
-    };
-    statut: QuizzStatut;
-}
-
-export interface QuizzResponse extends PersistentData {
-
-    idQuizz: string;
-    reponse: string;
-    questions: {
-        idQuestion: string;
-        reponse: string;
-        indice: string;
-    }[];
-
-}
-
-export interface UserResponse extends PersistentData {
-
-    userId: string;
-    quizzId: string;
-    statut: UserResponseStatut;
-    indiceTrouve: string;
-    reponseQuizz: string;
-    reponsesQuestions: {
-        questionId: string;
-        reponse: string;
-        statut: QuestionReponseStatut;
-    }[];
-
-}*/
