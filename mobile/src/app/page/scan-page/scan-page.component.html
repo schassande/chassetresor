@@ -10,7 +10,9 @@
 <ion-content>
     <div class="ion-padding">
         <h2>Scan Page</h2>
-        <p>La page de scan fonctionne</p>
+        <div style="text-align: center;">Scannez le QR de la question</div>
+        <qr-scanner [debug]="false" [canvasWidth]="720" [canvasHeight]="720" [stopAfterScan]="false" [updateTime]="500">
+        </qr-scanner>
     </div>
 
     <ion-fab horizontal="start" vertical="bottom" slot="fixed">

@@ -35,8 +35,8 @@ import { IndicesPipe } from './utlis/indices.pipe';
 import { UserResponseService } from './service/UserResponseService';
 import { QuizzService } from './service/QuizzService';
 import { ValidationService } from './service/ValidationService';
-import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 import { MessageService } from './service/MessageService';
+import { NgQrScannerModule } from 'angular2-qrscanner';
 
 @NgModule({
   declarations: [
@@ -64,6 +64,7 @@ import { MessageService } from './service/MessageService';
     AngularFirestoreModule.enablePersistence(),
     AngularFireStorageModule,
     AngularFireFunctionsModule,
+    NgQrScannerModule,
     AppRoutingModule
   ],
   providers: [
@@ -75,7 +76,6 @@ import { MessageService } from './service/MessageService';
     UserResponseService,
     QuizzService,
     ValidationService,
-    QRScanner,
     MessageService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

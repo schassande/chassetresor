@@ -1,6 +1,8 @@
+import { QuizzService } from 'src/app/service/QuizzService';
+import { NavController, AlertController } from '@ionic/angular';
 import { UserResponseService } from 'src/app/service/UserResponseService';
-import { Component, OnInit } from '@angular/core';
-import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { QrScannerComponent } from 'angular2-qrscanner';
 
 @Component({
   selector: 'app-scan-page',
@@ -9,41 +11,58 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 })
 export class ScanPageComponent implements OnInit {
 
-  constructor(
-    private userResponseService: UserResponseService,
-    private qrScanner: QRScanner) { }
+  @ViewChild(QrScannerComponent) qrScannerComponent: QrScannerComponent ;
 
-  ngOnInit() {
-    // Optionally request the permission early
-    this.qrScanner.prepare()
-      .then((status: QRScannerStatus) => {
-        if (status.authorized) {
-          // camera permission was granted
+  constructor(private alertCtrl: AlertController,
+              private navController: NavController,
+              private quizzService: QuizzService) { }
 
+    ngOnInit() {
+      this.qrScannerComponent.getMediaDevices().then(devices => {
+          const videoDevices: MediaDeviceInfo[] = [];
+          for (const device of devices) {
+              if (device.kind.toString() === 'videoinput') {
+                  videoDevices.push(device);
+              }
+          }
+          if (videoDevices.length > 0){
+              let choosenDev;
+              for (const dev of videoDevices){
+                  if (dev.label.includes('front')){
+                      choosenDev = dev;
+                      break;
+                  }
+              }
+              if (choosenDev) {
+                  this.qrScannerComponent.chooseCamera.next(choosenDev);
+              } else {
+                  this.qrScannerComponent.chooseCamera.next(videoDevices[0]);
+              }
+          }
+      });
 
-          // start scanning
-          const scanSub = this.qrScanner.scan().subscribe((text: string) => {
-            console.log('Scanned something', text);
-
-            this.qrScanner.hide(); // hide camera preview
-            scanSub.unsubscribe(); // stop scanning
-          });
-
-        } else if (status.denied) {
-          // camera permission was permanently denied
-          // you must use QRScanner.openSettings() method to guide the user to the settings page
-          // then they can grant the permission from there
-        } else {
-          // permission was denied, but not permanently. You can ask for permission again at a later time.
-        }
-      })
-      .catch((e: any) => console.log('Error is', e));
+      this.qrScannerComponent.capturedQr.subscribe(result => {
+          this.onScan(result);
+      });
   }
 
-  onScan() {
-    // this.userResponseService.getUserResponse(userId, quizzId).pipe(
-      // mettre a jour le scan a scanné si pas deja
-      // root vers la page Question
-    // )
+  onScan(result) {
+    console.log('Resultat du scan', result);
+    this.quizzService.getActiveQuizz().subscribe((quizz) => {
+      const [quizzId, questionId] = result.split('.');
+      console.log('quizzId', quizz, 'questionId', questionId);
+      if (quizz.id === quizzId) {
+        this.navController.navigateRoot(`/question/${questionId}`);
+      } else {
+        this.alertCtrl.create({
+          header: 'Erreur',
+          message: 'Ce quizz n\'est pas ouvert',
+          buttons: ['OK']
+        }).then(alert => {
+          alert.present();
+        });
+
+      }
+    });
   }
 }
