@@ -23,7 +23,7 @@ export class QuestionComponent implements OnInit {
   reponse: string;
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private validationService: ValidationService,
     private connectedUserService: ConnectedUserService,
     private userResponseService: UserResponseService,
@@ -35,24 +35,23 @@ export class QuestionComponent implements OnInit {
   }
 
   /** Chargement des valeurs de l'écran */
-  loadValues(){
-    var vm = this;
-    var questionId = this.route.snapshot.paramMap.get('questionId');
-    this.userResponseService.getUserQuestion(this.connectedUserService.getCurrentUser().id, questionId).then(function(rUserQuestion){
-        vm.question = rUserQuestion;
-    }).finally(function(){
+  loadValues() {
+    const questionId = this.route.snapshot.paramMap.get('questionId');
+    this.userResponseService.getUserQuestion(this.connectedUserService.getCurrentUser().id, questionId).then((rUserQuestion) => {
+        this.question = rUserQuestion;
+    }).finally(() => {
       /** Calcul du statut de l'ecran */
-      if(!vm.question){
-        vm.pageStatus = 'QUESTION_INDISPONIBLE';
+      if (!this.question) {
+        this.pageStatus = 'QUESTION_INDISPONIBLE';
       } else {
-        vm.pageStatus = 'QUESTION_A_TRAITER';
+        this.pageStatus = 'QUESTION_A_TRAITER';
       }
       /** Syncronization des changements */
-      vm.changeRef.detectChanges();
-    })
+      this.changeRef.detectChanges();
+    });
   }
 
-  validerSaisie(){
+  validerSaisie() {
     this.validationService.validerQuestion(this.reponse, this.question.questionId, this.connectedUserService.getCurrentUser().id);
   }
 }

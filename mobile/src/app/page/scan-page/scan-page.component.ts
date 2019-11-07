@@ -10,7 +10,7 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 export class ScanPageComponent implements OnInit {
 
   constructor(
-    private userResponseService: UserResponseService, 
+    private userResponseService: UserResponseService,
     private qrScanner: QRScanner) { }
 
   ngOnInit() {
