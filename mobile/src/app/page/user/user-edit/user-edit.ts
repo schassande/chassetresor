@@ -80,13 +80,13 @@ export class UserEditPage implements OnInit {
     };
   }
 
-  /** 
+  /**
    * Méthode de vérification de la validité du formulaire
    * Créé un tableau d'erreur vide puis push dedans chacune des erreurs du formulaire
    * Renvoie true si cette liste est vide à la fin des vérifs, false sinon
    */
   isValid(): boolean {
-    
+
     this.error = [];
 
     // Vérif email
