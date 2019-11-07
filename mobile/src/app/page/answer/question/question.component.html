@@ -13,37 +13,42 @@
   <ion-grid style="height: 100%">
     <ion-row justify-content-center align-items-center style="height: 100%">
 
-            <ion-item-group 
-                id="zone-saisie"
-                style="width: 100%;">
-                <ion-list class="formulaire">
-                    <ion-item>
-                      <p 
-                      style='margin-top: 0;
-                      padding: 0; 
-                      max-height: 200px;
-                      overflow: scroll;
-                      text-align: justify'>
-                          {{question.libelle}}
-                      </p>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label position="floating">
-                            <p
-                            style="display:inline-block;
-                            color: black;">Réponse</p>
-                        </ion-label>
-                        <ion-input 
-                            type="text" 
-                            [(ngModel)]="reponse"
-                            tabindex="1" 
-                            style="text-align: center;"
-                            maxlength="{{question.tailleReponse}}" 
-                            placeholder="{{''|indices:question.tailleReponse}}"
-                            ></ion-input>
-                    </ion-item>
-                </ion-list>
-                </ion-item-group>
+        <ion-item *ngIf="pageStatus == 'QUESTION_INDISPONIBLE'">
+            La question est indisponible pour le moment.
+        </ion-item>
+
+        <ion-item-group 
+            *ngIf="pageStatus == 'QUESTION_A_TRAITER'"
+            id="zone-saisie"
+            style="width: 100%;">
+            <ion-list class="formulaire">
+                <ion-item>
+                    <p 
+                    style='margin-top: 0;
+                    padding: 0; 
+                    max-height: 200px;
+                    overflow: scroll;
+                    text-align: justify'>
+                        {{question.libelle}}
+                    </p>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">
+                        <p
+                        style="display:inline-block;
+                        color: black;">Réponse</p>
+                    </ion-label>
+                    <ion-input 
+                        type="text" 
+                        [(ngModel)]="reponse"
+                        tabindex="1" 
+                        style="text-align: center;"
+                        maxlength="{{question.tailleReponse}}" 
+                        placeholder="{{''|indices:question.tailleReponse}}"
+                        ></ion-input>
+                </ion-item>
+            </ion-list>
+            </ion-item-group>
    
       </ion-row>
     </ion-grid>
@@ -55,6 +60,7 @@
     </ion-fab>
 
     <ion-button 
+        *ngIf="pageStatus == 'QUESTION_A_TRAITER'"
         class="bouton" 
         shape="round" 
         size="large"

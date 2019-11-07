@@ -80,9 +80,9 @@
 <!-- On affiche la liste des indices et la possibilité de répondre -->
 <ion-button 
     *ngIf="!(pageStatus == 'QUIZZ_TERMINE') && (pageStatus == 'QUESTIONS_A_TRAITER' || pageStatus == 'QUESTIONS_A_SCANNER')"
+    (click) ="redirectQuizzPage()"
     class="bouton" 
     expand="full" 
-    routerLink="/quizz" 
     color="success"
     style="width: 100%;
     height: 56px;

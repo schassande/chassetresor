@@ -14,7 +14,7 @@ export type PageStatus =  'CHARGEMENT' | 'AUCUN_QUIZZ' | 'QUESTIONS_A_SCANNER'| 
 })
 export class HomePage implements OnInit{
 
-  /** Statut de la page */
+  /** Statut de la page utilisé pour les differentes configurations de l'écran */
   pageStatus: PageStatus;
 
   /** Identifiant du quizz Actif */
@@ -67,9 +67,9 @@ export class HomePage implements OnInit{
         vm.pageStatus = 'AUCUN_QUIZZ';
       } else if (vm.isQuizzValide){
         vm.pageStatus = 'QUIZZ_TERMINE';
-      } else if(this.hasAllIndices()) {
+      } else if(vm.hasAllIndices()) {
         vm.pageStatus = 'INDICES_TROUVES';
-      } else if(this.hasQuestions()){
+      } else if(vm.hasQuestions()){
         vm.pageStatus = 'QUESTIONS_A_TRAITER';
       } else {
         vm.pageStatus = 'QUESTIONS_A_SCANNER';
@@ -77,12 +77,17 @@ export class HomePage implements OnInit{
 
       /** Syncronization des changements */
       vm.changeRef.detectChanges();
-    });
+    })
   }
 
   /** Methode redirigeant l'utilisateur vers la page de la question demandee */
   redirectQuestionPage(question: UserQuestion){
     this.navController.navigateRoot(['/question/' + JSON.stringify(question)]);
+  }
+
+  /** Methode redirigeant l'utilisateur vers la page de réponse au quiz */
+  redirectQuizzPage(question: UserQuestion){
+    this.navController.navigateRoot(['/quizz']);
   }
 
   /** Methode verifiant si l'utilisateur detiens tous les indices */

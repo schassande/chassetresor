@@ -5,6 +5,8 @@ import { QuizzService } from 'src/app/service/QuizzService';
 import { UserResponseService } from 'src/app/service/UserResponseService';
 import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
 
+export type PageStatus =  'CHARGEMENT' | 'QUIZZ_INDISPONIBLE' | 'QUIZZ_DISPONBILE' | 'QUIZZ_TERMINE';
+
 @Component({
   selector: 'app-quizz',
   templateUrl: './quizz.component.html',
@@ -12,14 +14,19 @@ import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
 })
 export class QuizzComponent implements OnInit {
 
+    /** Statut de la page utilisé pour les differentes configurations de l'écran */
+    pageStatus: PageStatus;
+
     /** Identifiant du quizz Actif */
     quizzId: string;
     /** Nombre d'indices à trouver */
     nbIndices: number = 0;
     /** Indices trouvés */
     indicesTrouves: Array<string> = [];
-    /** reponse */
+    /** Reponse de l'utilisateur */
     reponse: string = '';
+    /** Quizz validé ? */
+    isQuizzValide: boolean = false;
 
   constructor(
     private validationService: ValidationService,
@@ -30,6 +37,7 @@ export class QuizzComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.pageStatus = 'CHARGEMENT';
     this.loadValues();
   }
 
@@ -45,7 +53,20 @@ export class QuizzComponent implements OnInit {
       if(rUserResponse){
         vm.nbIndices = rUserResponse.reponsesQuestions.length;
         vm.initializeIndicesTab(rUserResponse.indicesTrouves);
+        vm.isQuizzValide = rUserResponse.statut == 'FINI';
       }
+      vm.changeRef.detectChanges();
+    }).finally(function(){
+      /** Calcul du statut de l'ecran */
+      if(!vm.quizzId){
+        vm.pageStatus = 'QUIZZ_INDISPONIBLE';
+      } else if (vm.isQuizzValide){
+        vm.pageStatus = 'QUIZZ_TERMINE';
+      } else {
+        vm.pageStatus = 'QUIZZ_DISPONBILE';
+      }
+
+      /** Syncronization des changements */
       vm.changeRef.detectChanges();
     })
   }
