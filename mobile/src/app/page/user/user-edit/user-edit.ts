@@ -91,11 +91,11 @@ export class UserEditPage implements OnInit {
 
     // Vérif email
     if (!this.isValidString(this.user.email, 5, 50)) {
-      this.error.push(('Invalid email length: must be 5 to 50 chars'));
+      this.error.push(('Taille de l\'email comprise entre 5 et 50 caractères'));
     }
     // Vérif password
     if (!this.isValidString(this.user.password, 5, 15)) {
-      this.error.push(('Invalid password length: must be 5 to 15 chars'));
+      this.error.push(('Taille du mot de passe comprise entre 5 et 15 caractères'));
     }
     return this.error.length === 0;
   }
@@ -122,10 +122,10 @@ export class UserEditPage implements OnInit {
         if (response.error) {
           if (response.error.code === 'auth/email-already-in-use') {
             console.log('The email address is already used.');
-            this.toastController.create({ message: 'The email address is already used: ' + this.user.email, duration: 5000})
+            this.toastController.create({ message: 'L\'adresse mail est déja utilisée : ' + this.user.email, duration: 5000})
               .then((toast) => toast.present());
           } else {
-            this.toastController.create({ message: 'Error when saving the user info: ' + this.error, duration: 5000})
+            this.toastController.create({ message: 'Erreur lors de la sauvegarde des informations : ' + this.error, duration: 5000})
               .then((toast) => toast.present());
           }
         } else {
