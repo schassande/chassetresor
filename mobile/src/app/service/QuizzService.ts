@@ -14,7 +14,6 @@ export class QuizzService  extends RemotePersistentDataService<Quizz> {
     constructor(
         db: AngularFirestore,
         toastController: ToastController,
-        private navController: NavController,
         public appSettingsService: AppSettingsService,
         public alertController: AlertController
     ) {
@@ -64,66 +63,6 @@ export class QuizzService  extends RemotePersistentDataService<Quizz> {
                 return result;
             })
         );
-    }
-
-    /**
-     * Methode de validation de la question
-     * @param reponseUtilisateur 
-     * @param questionId 
-     */
-    validerQuestion(reponseUtilisateur:string, questionId: string): Promise<string>{
-
-        return;
-       // var vm = this;
-        /** Verification que le quizz en question est ouvert */
-        //return
-
-        //return this.getUserResponse(userId, quizzId).toPromise()
-
-
-        // TODO
-        /*let reponseValidation: Boolean = pReponse == '1';
-    
-        if(reponseValidation){
-          this.showMessage('Indice ' + reponseValidation + ' ajouté !', 'validationPopupGreen');
-          this.navController.navigateRoot(['/home']);
-        } else{
-          this.showMessage('Réponse incorrecte','validationPopupRed');
-        }*/
-      }
-
-      /**
-       * Methode de validation du quizz
-       * @param reponseUtilisateur 
-       * @param quizzId 
-       */
-      validerQuizz(reponseUtilisateur:string, quizzId: string) {
-
-        return;
-
-
-        //TODO
-        //let reponseValidation: Boolean = pReponse == '1';
-        
-        /*if(reponseValidation){
-          this.showMessage('Vous avez résolu l\'énigme','validationPopupGreen');
-          this.navController.navigateRoot(['/home']);
-        } else{
-          this.showMessage('Réponse incorrecte','validationPopupRed');
-        }*/
-      }
-    
-    /**
-     * Affichage d'un message sous forme de popup
-     * @param pMessage 
-     * @param pCssClass 
-     */
-    async showMessage(pMessage: string, pCssClass: string) {
-        const alert = await this.alertController.create({
-          message: pMessage,
-          cssClass: pCssClass
-        });
-        await alert.present();
     }
 
 }

@@ -7,7 +7,6 @@ import { UserResponse } from '../model/quizz';
 import { QuizzService } from './QuizzService';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as firebase from 'firebase';
 
 @Injectable()
 export class UserResponseService  extends RemotePersistentDataService<UserResponse> {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IndicesPipe } from 'src/app/utlis/indices.pipe';
 import { NavController } from '@ionic/angular';
-import { QuizzService } from 'src/app/service/QuizzService';
+import { ValidationService } from 'src/app/service/ValidationService';
 
 @Component({
   selector: 'app-quizz',
@@ -19,7 +19,7 @@ export class QuizzComponent implements OnInit {
 
   constructor(
     private navController: NavController,
-    private quizzService: QuizzService) { }
+    private validationService: ValidationService) { }
 
   ngOnInit() {
     this.reponse='';
@@ -38,7 +38,7 @@ export class QuizzComponent implements OnInit {
   }
 
   validerSaisie(){
-    this.quizzService.validerQuizz(this.reponse, null);
+    this.validationService.validerQuizz(this.reponse, null);
   }
 
 }
