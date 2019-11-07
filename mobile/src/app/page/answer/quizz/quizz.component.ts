@@ -72,15 +72,15 @@ export class QuizzComponent implements OnInit {
 
   initializeIndicesTab(indices: string) {
     indices = new IndicesPipe().transform(indices, this.nbIndices).toString();
-    this.indicesTrouves = indices.replace(' ', '').split('');
-    /*
+
+    // TODO : Trouver un equivalent correspondant aux critères du lint
     this.indicesTrouves = new Array<string>();
     for (let i = 0; i < indices.length; i++) {
        if (indices[i] !== ' ') {
         this.indicesTrouves.push(indices[i]);
        }
     }
-    */
+
   }
 
   validerSaisie() {

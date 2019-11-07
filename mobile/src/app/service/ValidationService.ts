@@ -32,7 +32,7 @@ export class ValidationService {
      */
     validerQuestion(reponseUtilisateur: string, questionId: string, userId: string): Promise<string> {
         let activeQuizzId: string;
-
+        reponseUtilisateur = reponseUtilisateur ? reponseUtilisateur : '';
         return this.quizzService.getActiveQuizz().toPromise()
         /** Verification que la question se trouve dans le quizz au statut Ouvert */
         .then((rActiveQuizz) => {
@@ -108,6 +108,7 @@ export class ValidationService {
        * Methode de validation du quizz
        */
       validerQuizz(reponseUtilisateur: string, quizzId: string, userId: string): Promise<boolean> {
+        reponseUtilisateur = reponseUtilisateur ? reponseUtilisateur : '';
         /** Recuperation du quizz */
         return this.quizzService.get(quizzId).toPromise().then((rQuizz) => {
             /** Le quizz n'a pas été récupéré */

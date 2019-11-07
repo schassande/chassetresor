@@ -8,18 +8,22 @@
         </ion-toolbar>
     </ion-header>
 
-    <!-- Etat de l'écran avec des questions à traiter -->
-    <ion-label 
-        *ngIf="pageStatus == 'QUESTIONS_A_TRAITER'" 
-        style="padding: 15px; background-color: white;"> 
-        Répondez aux questions suivantes : 
-    </ion-label>
+
 
     <ion-content>
+
+
 
         <!-- Permet de centrer la page. Voir si moyen plus propre car galère en css -->
         <ion-grid style="height: 100%">
             <ion-row justify-content-center align-items-center style="height: 100%">
+
+                            <!-- Etat de l'écran avec des questions à traiter -->
+                <ion-label 
+                    *ngIf="pageStatus == 'QUESTIONS_A_TRAITER'" 
+                    style="padding: 15px; background-color: white;"> 
+                    Répondez aux questions suivantes
+                </ion-label>
  
                 <!-- Etat : Aucun quizz de disponnible -->
                 <label *ngIf="pageStatus == 'AUCUN_QUIZZ'">
@@ -48,9 +52,9 @@
                 </ion-button>
 
                 <!-- Etat de l'écran avec des questions à traiter -->
-                <ion-list style="width: 100%"  *ngIf="pageStatus == 'QUESTIONS_A_TRAITER'">
+                <ion-list style="width: 100%; height: 85%; overflow: auto;"  *ngIf="pageStatus == 'QUESTIONS_A_TRAITER'">
                     <ion-item *ngFor="let question of questions" (click) ="redirectQuestionPage(question)">
-                        <ion-label>{{question.id}}.  {{question.libelle}}</ion-label>
+                        <ion-label>{{question.questionId}}.  {{question.libelle}}</ion-label>
                         <ion-icon class="icone" name="arrow-forward"></ion-icon>
                     </ion-item>  
                 </ion-list>
