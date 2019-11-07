@@ -29,10 +29,11 @@ export class AppComponent {
   }
 
   reloadPage() {
-    window.location.reload(true);
+    window.location.reload();
   }
 
   public logout() {
     this.userService.logout();
   }
+
 }

@@ -158,7 +158,7 @@ export class UserService  extends RemotePersistentDataService<User> {
      */
     public autoLogin(): Observable<ResponseWithData<User>> {
         let loading = null;
-        return from(this.loadingController.create({ message: 'Auto login...', translucent: true})).pipe(
+        return from(this.loadingController.create({ message: 'Connexion en cours...', translucent: true})).pipe(
             flatMap( (ctrl) => {
                 loading = ctrl;
                 loading.present();
