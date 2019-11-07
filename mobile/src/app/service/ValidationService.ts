@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AppSettingsService } from './AppSettingsService';
 import { UserResponseService } from './UserResponseService';
 import { QuizzService } from './QuizzService';
+import { MessageService } from './MessageService';
 
 @Injectable()
 export class ValidationService {
@@ -12,7 +13,8 @@ export class ValidationService {
         public appSettingsService: AppSettingsService,
         public alertController: AlertController,
         public userResponseService: UserResponseService,
-        public quizzService: QuizzService
+        public quizzService: QuizzService,
+        public messageService: MessageService
     ) {}
 
     getLocalStoragePrefix(): string {
@@ -37,7 +39,7 @@ export class ValidationService {
         .then(function(rActiveQuizz){
             /** Pas de quizz actif */
             if(!rActiveQuizz){
-                vm.showMessage('Le quiz n\'est plus ouvert','validationPopupRed');
+                vm.messageService.showMessage('Le quiz n\'est plus ouvert','validationPopupRed');
                 vm.navController.navigateRoot(['/home']);
                 return;
             } else{
@@ -46,7 +48,7 @@ export class ValidationService {
                 var question = rActiveQuizz.questions.find(function(element) { return element.questionId == questionId; });
                 /** Question non trouvée */
                 if(!question){
-                    vm.showMessage('La question n\'a pas été trouvée en base','validationPopupRed');
+                    vm.messageService.showMessage('La question n\'a pas été trouvée en base','validationPopupRed');
                     vm.navController.navigateRoot(['/home']);
                     return;
                 } else{
@@ -59,13 +61,13 @@ export class ValidationService {
             if(!rQuestion){
                 return;
             } else if(reponseUtilisateur.toUpperCase() != rQuestion.reponse.toUpperCase()){
-                vm.showMessage('Réponse incorrecte','validationPopupRed');
+                vm.messageService.showMessage('Réponse incorrecte','validationPopupRed');
                 return;
             } else{
                 /** Récupération du user response */
                 return vm.userResponseService.getUserResponse(userId,activeQuizzId).toPromise().then(function(rUserResponse){
                     if(!rUserResponse){
-                        vm.showMessage('Un problème est survenu lors de la récupération des informations utilisateur','validationPopupRed');
+                        vm.messageService.showMessage('Un problème est survenu lors de la récupération des informations utilisateur','validationPopupRed');
                         return;
                     } else{
                         rUserResponse.indicesTrouves = rUserResponse.indicesTrouves.concat(rQuestion.indice);
@@ -89,9 +91,9 @@ export class ValidationService {
                     if(!rUserResponse){
                         return;
                     } else if(!rUserResponse.data){
-                        vm.showMessage('Un problème est survenu lors de la mise à jour des informations utilisateur','validationPopupRed');
+                        vm.messageService.showMessage('Un problème est survenu lors de la mise à jour des informations utilisateur','validationPopupRed');
                     } else {
-                        vm.showMessage('Indice ' + rQuestion.indice + ' ajouté !', 'validationPopupGreen');
+                        vm.messageService.showMessage('Indice ' + rQuestion.indice + ' ajouté !', 'validationPopupGreen');
                         vm.navController.navigateRoot(['/home']);
                         return rQuestion.indice;
                     }
@@ -112,13 +114,13 @@ export class ValidationService {
         return this.quizzService.get(quizzId).toPromise().then(function(rQuizz){
             /** Le quizz n'a pas été récupéré */
             if(!rQuizz.data){
-                vm.showMessage('Erreur lors de la récupération du quiz','validationPopupRed');
+                vm.messageService.showMessage('Erreur lors de la récupération du quiz','validationPopupRed');
                 return false;
             } else if (rQuizz.data.statut != 'OUVERT') {
-                vm.showMessage('Le quiz n\'est plus ouvert','validationPopupRed');
+                vm.messageService.showMessage('Le quiz n\'est plus ouvert','validationPopupRed');
                 return false;
             } else if (rQuizz.data.reponse.toUpperCase() != reponseUtilisateur.toUpperCase()){
-                vm.showMessage('Réponse incorrecte','validationPopupRed');
+                vm.messageService.showMessage('Réponse incorrecte','validationPopupRed');
                 return false;
             } else {
                 return true;
@@ -130,16 +132,16 @@ export class ValidationService {
                 /** On met à jour le userResponse */
                 return vm.userResponseService.getUserResponse(userId, quizzId).toPromise().then(function(rUserResponse){
                     if(!rUserResponse){
-                        vm.showMessage('Un problème est survenu lors de la récupération des informations utilisateur','validationPopupRed');
+                        vm.messageService.showMessage('Un problème est survenu lors de la récupération des informations utilisateur','validationPopupRed');
                         return false;
                     } else {
                         rUserResponse.statut = 'FINI';
                         rUserResponse.reponseQuizz = reponseUtilisateur;
                         return vm.userResponseService.save(rUserResponse).toPromise().then(function(rUserResponse){
                             if(!rUserResponse.data){
-                                vm.showMessage('Un problème est survenu lors de la mise à jour des informations utilisateur','validationPopupRed');
+                                vm.messageService.showMessage('Un problème est survenu lors de la mise à jour des informations utilisateur','validationPopupRed');
                             } else{
-                                vm.showMessage('Vous avez résolu l\'énigme','validationPopupGreen');
+                                vm.messageService.showMessage('Vous avez résolu l\'énigme','validationPopupGreen');
                                 vm.navController.navigateRoot(['/home']);
                                 return true;
                             }
@@ -149,18 +151,5 @@ export class ValidationService {
             }
         })
       }
-    
-    /**
-     * Affichage d'un message sous forme de popup
-     * @param pMessage 
-     * @param pCssClass 
-     */
-    async showMessage(pMessage: string, pCssClass: string) {
-        const alert = await this.alertController.create({
-          message: pMessage,
-          cssClass: pCssClass
-        });
-        await alert.present();
-    }
 
 }

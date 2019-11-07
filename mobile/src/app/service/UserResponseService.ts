@@ -3,10 +3,11 @@ import { AngularFirestore } from 'angularfire2/firestore';
 
 import { Injectable } from '@angular/core';
 import { RemotePersistentDataService } from './RemotePersistentDataService';
-import { UserResponse } from '../model/quizz';
+import { UserResponse, UserQuestion } from '../model/quizz';
 import { QuizzService } from './QuizzService';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MessageService } from './MessageService';
 
 @Injectable()
 export class UserResponseService  extends RemotePersistentDataService<UserResponse> {
@@ -14,7 +15,8 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
     constructor(
         private quizzService: QuizzService,
         db: AngularFirestore,
-        toastController: ToastController
+        toastController: ToastController,
+        private messageService: MessageService
     ) {
         super(db, toastController);
     }
@@ -25,6 +27,30 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
 
     getPriority(): number {
         return 1;
+    }
+
+
+    /**
+     * Methode retournant une UserQuestion a partir d'un userId et d'un quizzId
+     * La question est recherchée dans le quiz actif
+     * @param userId 
+     * @param questionId 
+     */
+    getUserQuestion(userId: string, questionId: string): Promise<UserQuestion> {
+
+        /*return this.quizzService.getActiveQuizzId().toPromise().then(function(rQuizzId){
+
+            if(!rQuizzId){
+
+                return;
+            }
+
+
+
+        })*/
+
+
+        return;
     }
 
     /**
