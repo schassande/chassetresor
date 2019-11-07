@@ -35,7 +35,7 @@ export class ValidationService {
 
         return this.quizzService.getActiveQuizz().toPromise()
         /** Verification que la question se trouve dans le quizz au statut Ouvert */
-        .then(function(rActiveQuizz) {
+        .then((rActiveQuizz) => {
             /** Pas de quizz actif */
             if (!rActiveQuizz) {
                 this.messageService.showMessage('Le quiz n\'est plus ouvert', 'validationPopupRed');
@@ -123,7 +123,7 @@ export class ValidationService {
             } else {
                 return true;
             }
-        }).then(function(isValid) {
+        }).then((isValid) => {
             if (!isValid) {
                 return false;
             } else {
