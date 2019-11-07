@@ -1,5 +1,7 @@
 {
   "name": "chasseTresorApp",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
