@@ -4,7 +4,7 @@ import { PersistentData } from './common';
  * Classe contenant le quizz et ses questions
  * PS : exposé uniquement dans l'IHM admin de gestion des quizz
  */
-export type QuizzStatut = 'INIT' | 'OUVERT' | 'FERME';
+export type QuizzStatut = 'OUVERT' | 'FERME';
 export interface Quizz extends PersistentData {
     /** Libelle/nom du quizz */
     libelle: string;

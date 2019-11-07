@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Quizz } from 'src/app/model/quizz';
 import { QuizzService } from 'src/app/service/QuizzService';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-manage-quizz',
@@ -13,7 +14,8 @@ export class ManageQuizzComponent implements OnInit {
   listQuizz: Quizz[];
 
   /** Constructeur */
-  constructor(private quizzService: QuizzService) { }
+  constructor(private quizzService: QuizzService,
+    private alertCtrl: AlertController) { }
 
   /** Méthode exécutée à l'initialisation de l'écran */
   ngOnInit() {
@@ -21,23 +23,41 @@ export class ManageQuizzComponent implements OnInit {
   }
 
   /**
-   * Fonction permettant le chargement des quizz présent en base
+   * Fonction permettant le chargement tous les quizz présents en base
    */
   loadQuizz() {
     this.quizzService.all().subscribe(rQuizz => this.listQuizz = rQuizz.data);
   }
 
   /**
-   * Fonction permettant de démarrer un Quizz
-   * Il passe alors du statut INIT à OUVERT
+   * Fonction permettant de (re)démarrer un Quizz
+   * Il passe alors du statut FERME à OUVERT
    * 
-   * @param quizzName le nom du quizz
+   * @param quizzId l'ID du quizz
    */
-  startQuizz(quizzName) {
-    for (let quizz of this.listQuizz) {
-      if (quizz.libelle == quizzName) {
-        if (quizz.statut == 'INIT') {
-          quizz.statut = 'OUVERT';
+  startQuizz(quizzId) {
+    
+    let openQuizz: Quizz;
+    this.quizzService.getActiveQuizz().subscribe(rQuizz => openQuizz = rQuizz);
+
+    // Vérification qu'il n'y a pas déjà un quizz OUVERT
+    if (openQuizz) {
+      // Si il y a déjà un quizz ouvert => message d'erreur + do nothing
+      this.alertCtrl.create({
+        header: 'Erreur',
+        message: 'Il y a déjà un quizz ouvert actuellement : ' + openQuizz.libelle,
+        buttons: ['OK']
+      }).then(alert => {
+        alert.present();
+      });
+    } else {
+      // Sinon ; ouverture du quizz + update en base (TODO)
+      for (let quizz of this.listQuizz) {
+        if (quizz.id == quizzId) {
+          if (quizz.statut == 'FERME') {
+            quizz.statut = 'OUVERT';
+          }
+          this.quizzService.save(quizz).subscribe();
         }
       }
     }
@@ -47,11 +67,11 @@ export class ManageQuizzComponent implements OnInit {
    * Fonction permettant de stopper un quizz
    * Il passe alors du statut OUVERT à FERME
    * 
-   * @param quizzName le nom du quizz
+   * @param quizzId l'ID du quizz
    */
-  stopQuizz(quizzName) {
+  stopQuizz(quizzId) {
     for (let quizz of this.listQuizz) {
-      if (quizz.libelle == quizzName) {
+      if (quizz.id == quizzId) {
         if (quizz.statut == 'OUVERT') {
           quizz.statut = 'FERME';
         }

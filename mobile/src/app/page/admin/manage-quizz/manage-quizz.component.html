@@ -16,8 +16,8 @@
       Statut : {{quizz.statut}}
       <br>
       <section>
-        <ion-button size="small" color="success" (click)="startQuizz(quizz.libelle)" [disabled]="quizz.statut!='INIT'">Démarrer</ion-button>
-        <ion-button size="small" color="warning" (click)="stopQuizz(quizz.libelle)" [disabled]="quizz.statut!='OUVERT'">Arrêter</ion-button>
+        <ion-button size="small" color="success" (click)="startQuizz(quizz.id)" [disabled]="quizz.statut=='OUVERT'">Démarrer</ion-button>
+        <ion-button size="small" color="warning" (click)="stopQuizz(quizz.id)" [disabled]="quizz.statut=='FERME'">Arrêter</ion-button>
       </section>
     </ion-card-content>
   </ion-card>
