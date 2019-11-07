@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { Question } from 'src/app/model/referentiels/question';
+import { UserQuestion, UserResponse } from 'src/app/model/quizz';
+import { UserResponseService } from 'src/app/service/UserResponseService';
+import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
+import { QuizzService } from 'src/app/service/QuizzService';
 
 @Component({
   selector: 'app-home',
@@ -9,55 +12,48 @@ import { Question } from 'src/app/model/referentiels/question';
 })
 export class HomePage implements OnInit{
 
+  /** Identifiant du quizz Actif */
+  quizzId: string;
   /** Nombre d'indices à trouver */
-  nbIndices: number;
+  nbIndices: number = 0;
   /** Indices trouvés */
-  indicesTrouves: string;
-  /** Questions en attente */
-  questions: Array<Question>;
+  indicesTrouves: string = '';
+  /** Questions en attente de réponse */
+  questions: UserQuestion[] = [];
 
   constructor(
-    private navController: NavController
-  ) {}
-
-  /** Mock */
-  initMock(): void{
-    this.nbIndices = 11;
-    this.indicesTrouves = 'MMMMM';
-    this.questions= new Array<Question>();
-
-    var q1: Question = {
-      id: '1',
-      libelle: 'Qui suis-je ?',
-      nbIndices: 15,
-      reponse: null, 
-      version: null, 
-      creationDate: null, 
-      lastUpdate: null, 
-      dataStatus: null
-    };
-
-    var q2: Question = {
-      id: '2',
-      libelle: 'Qu\'est ce que l\'agilité ?',
-      nbIndices: 3,
-      reponse: null, 
-      version: null, 
-      creationDate: null, 
-      lastUpdate: null, 
-      dataStatus: null
-    };
-
-    this.questions.push(q1);
-    this.questions.push(q2);
-  }
+    private navController: NavController,
+    private userResponseService: UserResponseService,
+    private connectedUserService: ConnectedUserService,
+    private quizzService: QuizzService,
+    private changeRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.initMock();
+    /** Chargement des valeurs de l'écran */
+    this.loadValues();
+  }
+
+  loadValues() {
+    var vm = this;
+    /** Etape 1 : Récupération de l'identifiant du Quizz courant */
+    this.quizzService.getActiveQuizzId().toPromise().then(function(rQuizzId){
+      vm.quizzId = rQuizzId;
+      /** Etape 2 : Récupération de UserResponse */
+      return vm.userResponseService.loadUserResponse(vm.connectedUserService.getCurrentUser().id, vm.quizzId)
+    }).then(function(rUserResponse){
+      /** Etape 3 : Initialisation des valeurs de l'écran avec UserResponse */
+      if(rUserResponse){
+        vm.nbIndices = rUserResponse.reponsesQuestions.length; // Il y a autant de questions que d'indices
+        vm.indicesTrouves = rUserResponse.indicesTrouves;
+        vm.questions = rUserResponse.reponsesQuestions.filter(userQuestion => userQuestion.statut == 'SCANNE');
+      }
+      /** Etape 4 : Syncronization des changements */
+      vm.changeRef.detectChanges();
+    })
   }
 
   /** Methode redirigeant l'utilisateur vers la page de la question demandee */
-  redirectQuestionPage(question: Question){
+  redirectQuestionPage(question: UserQuestion){
     this.navController.navigateRoot(['/question/' + JSON.stringify(question)]);
   }
 

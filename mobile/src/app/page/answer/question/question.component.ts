@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Question } from 'src/app/model/referentiels/question';
-import { AlertController } from '@ionic/angular';
-import { ValidationService } from 'src/app/service/ValidationService';
+import { UserQuestion } from 'src/app/model/quizz';
+import { QuizzService } from 'src/app/service/QuizzService';
 
 @Component({
   selector: 'app-question',
@@ -12,19 +11,19 @@ import { ValidationService } from 'src/app/service/ValidationService';
 export class QuestionComponent implements OnInit {
 
   /** Question à trouver */
-  question: Question;
-  /** reponse */
+  question: UserQuestion;
+  /** Reponse de l'utilisateur */
   reponse: string;
 
   constructor(
     private route: ActivatedRoute, 
-    private validationService: ValidationService) {}
+    private quizzService: QuizzService) {}
 
   ngOnInit() {
     this.question = JSON.parse(this.route.snapshot.paramMap.get('question'));
   }
 
   validerSaisie(){
-    this.validationService.validerQuestion(this.reponse, null);
+    this.quizzService.validerQuestion(this.reponse, this.question.questionId);
   }
 }
