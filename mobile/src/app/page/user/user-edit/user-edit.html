@@ -5,16 +5,16 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="success">
         <ion-buttons slot="start">
             <ion-button (click)="cancel()" detail>
                 <ion-icon name="arrow-back"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-title style="text-align: center;">Account Edition</ion-title>
-        <ion-buttons slot="end">
+        <ion-title style="text-align: center;">CREER UN COMPTE</ion-title>
+        <!--<ion-buttons slot="end">
             <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
-        </ion-buttons>
+        </ion-buttons>-->
     </ion-toolbar>
 </ion-header>
 <ion-content *ngIf="user">
@@ -41,14 +41,17 @@
         </ion-item>
     </ion-list>
     <div round *ngIf="error.length > 0" class="alert alert-danger">
-        Please fix the following problem(s):
+        Votre saisie n'est pas valide :
         <ul>
             <li *ngFor="let er of error">{{er}}</li>
         </ul>
     </div>
     <div style="text-align: center;">
         <ion-button shape="round" color="danger" (click)="deleteAccount()" *ngIf="user.dataStatus !== 'NEW'">Delete Account</ion-button>
-        <ion-button shape="round" (click)="newUser($event)" [disabled]="(email.invalid || password.invalid || lastName.invalid || firstName.invalid || phone.invalid) && !saving">Save</ion-button>
+        <ion-button class="bouton" shape="round" color="success" size="large" (click)="newUser($event)"
+            [disabled]="(email.invalid || password.invalid || lastName.invalid || firstName.invalid || phone.invalid) && !saving">
+                <ion-text class="texte-bouton">Enregistrer</ion-text>
+            </ion-button>
     </div>
 </ion-content>
 <ion-footer>
