@@ -1,4 +1,4 @@
-import { ToastController } from '@ionic/angular';
+import { ToastController, NavController } from '@ionic/angular';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import { Injectable } from '@angular/core';
@@ -16,7 +16,8 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
         private quizzService: QuizzService,
         db: AngularFirestore,
         toastController: ToastController,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private navController: NavController
     ) {
         super(db, toastController);
     }
@@ -37,20 +38,42 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
      * @param questionId 
      */
     getUserQuestion(userId: string, questionId: string): Promise<UserQuestion> {
+        var vm = this;
 
-        /*return this.quizzService.getActiveQuizzId().toPromise().then(function(rQuizzId){
-
+        return this.quizzService.getActiveQuizzId().toPromise().then(function(rQuizzId){
             if(!rQuizzId){
-
+                vm.messageService.showMessage('Le quiz n\'est plus ouvert','validationPopupRed');
                 return;
+            } else{
+                return vm.getUserResponse(userId,rQuizzId).toPromise().then(function(rUserResponse){
+                    if(!rUserResponse){
+                        vm.messageService.showMessage('Un problème est survenu lors de la récupération des informations utilisateur','validationPopupRed');
+                        return;
+                    } else{
+                        return rUserResponse;
+                    }
+                })
             }
-
-
-
-        })*/
-
-
-        return;
+        }).then(function(rUserResponse){
+            if(!rUserResponse){
+                return;
+            } else{
+                 /** Recherche de la question */
+                 var question = rUserResponse.reponsesQuestions.find(function(element) { return element.questionId == questionId; });
+                 /** Question non trouvée */
+                 if(!question){
+                    vm.messageService.showMessage('La question n\'a pas été trouvée en base','validationPopupRed');
+                    vm.navController.navigateRoot(['/home']);
+                    return;
+                 } else if(question.statut == 'VALIDE') {
+                    vm.messageService.showMessage('Vous avez déja répondu à cette question','validationPopupGreen');
+                    vm.navController.navigateRoot(['/home']);
+                    return;
+                 } else {
+                    return question;
+                 }
+            }
+        })
     }
 
     /**

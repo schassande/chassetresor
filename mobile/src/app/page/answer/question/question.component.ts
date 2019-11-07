@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserQuestion } from 'src/app/model/quizz';
 import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
 import { ValidationService } from 'src/app/service/ValidationService';
+import { UserResponseService } from 'src/app/service/UserResponseService';
 
 export type PageStatus =  'CHARGEMENT' | 'QUESTION_INDISPONIBLE' | 'QUESTION_A_TRAITER';
 
@@ -24,7 +25,9 @@ export class QuestionComponent implements OnInit {
   constructor(
     private route: ActivatedRoute, 
     private validationService: ValidationService,
-    private connectedUserService: ConnectedUserService) {}
+    private connectedUserService: ConnectedUserService,
+    private userResponseService: UserResponseService,
+    private changeRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.pageStatus = 'CHARGEMENT';
@@ -33,8 +36,20 @@ export class QuestionComponent implements OnInit {
 
   /** Chargement des valeurs de l'écran */
   loadValues(){
-    this.question = JSON.parse(this.route.snapshot.paramMap.get('question')); // TODO appel back
-    this.pageStatus = 'QUESTION_A_TRAITER'; 
+    var vm = this;
+    var questionId = this.route.snapshot.paramMap.get('questionId');
+    this.userResponseService.getUserQuestion(this.connectedUserService.getCurrentUser().id, questionId).then(function(rUserQuestion){
+        vm.question = rUserQuestion;
+    }).finally(function(){
+      /** Calcul du statut de l'ecran */
+      if(!vm.question){
+        vm.pageStatus = 'QUESTION_INDISPONIBLE';
+      } else {
+        vm.pageStatus = 'QUESTION_A_TRAITER';
+      }
+      /** Syncronization des changements */
+      vm.changeRef.detectChanges();
+    })
   }
 
   validerSaisie(){
