@@ -1,7 +1,16 @@
 <ion-header>
     <ion-toolbar>
         <span slot="start" style="margin-left: 10px;"><img src="assets/imgs/logo.png" height="30" /></span>
-        <ion-title style="text-align: center;">Question n°{{question.questionId}}</ion-title>
+        <ion-title 
+            *ngIf="pageStatus == 'QUESTION_DISPONIBLE'"
+            style="text-align: center;">
+            Question n°{{question.questionId}}
+        </ion-title>
+        <ion-title 
+            *ngIf="pageStatus == 'QUESTION_INDISPONIBLE'"
+            style="text-align: center;">
+            Question
+        </ion-title>
         <ion-buttons slot="end">
             <ion-menu-button autoHide="false" menu="main"></ion-menu-button>
         </ion-buttons>

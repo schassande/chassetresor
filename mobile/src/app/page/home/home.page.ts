@@ -82,7 +82,7 @@ export class HomePage implements OnInit{
 
   /** Methode redirigeant l'utilisateur vers la page de la question demandee */
   redirectQuestionPage(question: UserQuestion){
-    this.navController.navigateRoot(['/question/' + JSON.stringify(question)]);
+    this.navController.navigateRoot(['/question/' + question.questionId]);
   }
 
   /** Methode redirigeant l'utilisateur vers la page de réponse au quiz */
