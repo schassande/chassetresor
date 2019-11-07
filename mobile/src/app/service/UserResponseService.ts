@@ -81,7 +81,7 @@ export class UserResponseService  extends RemotePersistentDataService<UserRespon
                                 questionId: element.questionId,
                                 libelle: element.libelle,
                                 statut: 'NON_SCANNE',
-                                tailleReponse: element.libelle.length,
+                                tailleReponse: element.reponse.length,
                                 reponse: null
                             }
                         );
