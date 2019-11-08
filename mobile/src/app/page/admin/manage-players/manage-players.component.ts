@@ -111,27 +111,47 @@ export class ManagePlayersComponent implements OnInit {
       } else {
         vainqueur = vainqueursPlausiblesReduit[0];
       }
-
-      // Désignation du vainqueur
-      if (vainqueur) {
-        this.infoQuizz.mailVainqueur = vainqueur.user.email;
-        this.alertCtrl.create({
-          header: 'And the winner is...',
-          message: vainqueur.user.firstName + ' ' + vainqueur.user.lastName + ', ' + vainqueur.user.phone + ', ' + vainqueur.user.email,
-          buttons: ['OK']
-        }).then(alert => {
-          alert.present();
-        });
-      } else {
-        this.alertCtrl.create({
-          header: 'Oups...',
-          message: 'Aucun joueur n\'a résolu le quizz pour le moment',
-          buttons: ['OK']
-        }).then(alert => {
-          alert.present();
-        });
-      }
-
     }
+
+    // Désignation du vainqueur
+    if (vainqueur) {
+      this.setVainqueur(vainqueur);
+      this.alertCtrl.create({
+        header: 'And the winner is...',
+        message: vainqueur.user.firstName + ' ' + vainqueur.user.lastName + ', ' + vainqueur.user.phone + ', ' + vainqueur.user.email,
+        buttons: ['OK']
+      }).then(alert => {
+        alert.present();
+      });
+    } else {
+      this.alertCtrl.create({
+        header: 'Oups...',
+        message: 'Aucun joueur n\'a résolu le quizz pour le moment',
+        buttons: ['OK']
+      }).then(alert => {
+        alert.present();
+      });
+    }
+
+  }
+
+  /**
+   * Méthode utilisée pour mettre à jour en base un quizz et son vainqueur
+   * 
+   * @param vainqueur le vainqueur du quizz
+   */
+  setVainqueur(vainqueur: Player) {
+
+    // Chargement du quizz actif à l'écran
+    let quizz: Quizz = this.listQuizz[this.selectedQuizzIdx];
+
+    // On y sette le vainqueur
+    quizz.gagnant = {
+      userId: vainqueur.user.id,
+      email: vainqueur.user.email
+    }
+
+    // MàJ en base
+    this.quizzService.save(quizz);
   }
 }
