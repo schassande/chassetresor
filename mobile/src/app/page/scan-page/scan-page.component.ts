@@ -1,8 +1,11 @@
+import { map, flatMap } from 'rxjs/operators';
+import { ConnectedUserService } from 'src/app/service/ConnectedUserService';
 import { QuizzService } from 'src/app/service/QuizzService';
 import { NavController, AlertController } from '@ionic/angular';
 import { UserResponseService } from 'src/app/service/UserResponseService';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { QrScannerComponent } from 'angular2-qrscanner';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-scan-page',
@@ -15,6 +18,8 @@ export class ScanPageComponent implements OnInit {
 
   constructor(private alertCtrl: AlertController,
               private navController: NavController,
+              private userResponseService: UserResponseService,
+              private connectedUserService: ConnectedUserService,
               private quizzService: QuizzService) { }
 
     ngOnInit() {
@@ -49,10 +54,25 @@ export class ScanPageComponent implements OnInit {
   onScan(result) {
     console.log('Resultat du scan', result);
     this.quizzService.getActiveQuizz().subscribe((quizz) => {
-      const [quizzId, questionId] = result.split('.');
-      console.log('quizzId', quizz, 'questionId', questionId);
-      if (quizz.id === quizzId) {
-        this.navController.navigateRoot(`/question/${questionId}`);
+      const [libelleQuizz, questionIdxStr] = result.split('.');
+      const questionIdx: number = parseInt(questionIdxStr, 10) - 1;
+      let questionId = '';
+      console.log('quizzId', quizz, 'questionIdx', questionIdx);
+      if (quizz.libelle === libelleQuizz) {
+        // mise a jour de la reponse utilisateur pour indiquer que la question est scannee
+        this.userResponseService.getUserResponse(this.connectedUserService.getCurrentUser().id, quizz.id).pipe(
+          flatMap(rur => {
+            questionId = rur.reponsesQuestions[questionIdx].questionId;
+            if (rur.reponsesQuestions[questionIdx].statut === 'NON_SCANNE') {
+              rur.reponsesQuestions[questionIdx].statut = 'SCANNE';
+              return this.userResponseService.save(rur);
+            }
+            return of({data: null, error: 'ALREADY'});
+          }),
+          map((rur) => {
+            this.navController.navigateRoot(`/question/${questionId}`);
+          })
+        ).subscribe();
       } else {
         this.alertCtrl.create({
           header: 'Erreur',
